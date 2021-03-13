@@ -10,49 +10,49 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="bill_book")
+@Table(name = "bill_book")
 public class BillBook {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name="id")
+	@Column(name = "id")
 	private long id;
 	@ManyToOne
-	@JoinColumn(name="customer_id")
+	@JoinColumn(name = "customer_id")
 	AppUser customer;
-	@Column(name="address")
+	@Column(name = "address")
 	private String address;
 	@ManyToOne
-	@JoinColumn(name="site")
+	@JoinColumn(name = "site")
 	Site site;
 	@ManyToOne
-	@JoinColumn(name="vehicle")
+	@JoinColumn(name = "vehicle")
 	Vehicle vehicle;
-	@Column(name="reciept_number")
+	@Column(name = "reciept_number")
 	private String recieptNumber;
-	@Column(name="unit")
+	@Column(name = "unit")
 	private double unit;
-	@Column(name="amount")
+	@Column(name = "amount")
 	private double amount;
-	@Column(name="loading_amount")
+	@Column(name = "loading_amount")
 	private double loadingAmount;
-	@Column(name="unloading_amount")
+	@Column(name = "unloading_amount")
 	private double unloadingAmount;
-	@Column(name="total")
+	@Column(name = "total")
 	private double total;
-	@Column(name="paid")
+	@Column(name = "paid")
 	private double paid;
-	@Column(name="balance")
+	@Column(name = "balance")
 	private double balance;
 	@ManyToOne
-	@JoinColumn(name="sale")
+	@JoinColumn(name = "sale")
 	Sales sales;
 	@ManyToOne
-	@JoinColumn(name="loaders")
+	@JoinColumn(name = "loaders")
 	AppUser loaders;
 	@ManyToOne
-	@JoinColumn(name="unloaders")
+	@JoinColumn(name = "unloaders")
 	AppUser unloaders;
-	@Column(name="carriage")
+	@Column(name = "carriage")
 	private double carriage;
 
 	public long getId() {
@@ -199,8 +199,5 @@ public class BillBook {
 				+ ", paid=" + paid + ", balance=" + balance + ", sales=" + sales + ", loaders=" + loaders
 				+ ", unloaders=" + unloaders + ", carriage=" + carriage + "]";
 	}
-	
-	
-	
 
 }
