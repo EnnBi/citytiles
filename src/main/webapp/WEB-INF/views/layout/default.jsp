@@ -239,7 +239,9 @@
 				<tiles:insertAttribute name="menu" />
 				<!-- partial -->
 				<div class="content-wrapper">
-					<tiles:insertAttribute name="body" />
+					<div class="row">
+						<tiles:insertAttribute name="body" />
+					</div>
 					<!-- partial -->
 				</div>
 				<!-- content-wrapper ends -->
