@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="app_user")
 public class AppUser {
@@ -18,24 +20,42 @@ public class AppUser {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
-	
+	@NotNull(message ="Name is required")
+	@NotEmpty(message="Name is required")
 	@Column(name="name")
 	private String name;
+	
+	@NotNull(message ="contact is required")
+	@NotEmpty(message="contact is required")
 	@Column(name="contact")
 	private String contact;
+	
+	@NotNull(message ="address is required")
+	@NotEmpty(message="address is required")
 	@Column(name="address")
 	private String address;
+	
 	@ManyToOne
 	@JoinColumn(name="user_type_id")
+	@NotNull(message ="userType is required")
 	UserType userType;
 	
+	@NotNull(message ="Ledger Number is required")
+	@NotEmpty(message="Ledger Number is required")
 	@Column(name="ledger_number")
 	private String ledgerNumber;
+	
+	@NotNull(message ="Account Number is required")
+	@NotEmpty(message="Account Number is required")
 	@Column(name="account_number")
 	private String accountNumber;
+	
 	@OneToMany
 	@JoinColumn(name="site")
+	@NotNull(message ="site is required")
 	List<Site> sites;
+	
+	
 	public long getId() {
 		return id;
 	}

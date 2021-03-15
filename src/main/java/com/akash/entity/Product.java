@@ -18,11 +18,14 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@OneToMany
 	@JoinColumn(name="size_id")
 	List<Size> sizes;
+	
 	public long getId() {
 		return id;
 	}

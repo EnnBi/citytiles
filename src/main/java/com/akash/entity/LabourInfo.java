@@ -1,11 +1,21 @@
 package com.akash.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name="labour_info")
@@ -14,14 +24,21 @@ public class LabourInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
 	@Column(name="quantity")
 	private double quantity;
+	
 	@Column(name="amount_per_head")
 	private double amountPerHead;
+	
 	@Column(name="total_amount")
 	private double totalAmount;
-	@Column(name="labours")
-	private String labours;
+	
+	@NotNull(message = "Please select labours")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "labourinfo_Labours")
+	 List<AppUser> labours;
 
 	public long getId() {
 		return id;
@@ -55,11 +72,11 @@ public class LabourInfo {
 		this.totalAmount = totalAmount;
 	}
 
-	public String getLabours() {
+	public List<AppUser> getLabours() {
 		return labours;
 	}
 
-	public void setLabours(String labours) {
+	public void setLabours(List<AppUser> labours) {
 		this.labours = labours;
 	}
 

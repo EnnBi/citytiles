@@ -18,20 +18,26 @@ public class DayBook {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
 	@ManyToOne
 	@JoinColumn(name="customerId")
 	AppUser customer;
 	
 	@Column(name="transaction_number")
 	private String transactionNumber;
+	
 	@Column(name="transaction_type")
 	private String transactionType;
+	
 	@Column(name="account_number")
 	private String accountNumber;
+	
 	@Column(name="responsible_person")
 	private String responsiblePerson;
+	
 	@Column(name="date")
 	LocalDate date;
+	
 	@Column(name="status")
 	private String status;
 

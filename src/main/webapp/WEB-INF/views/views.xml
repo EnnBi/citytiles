@@ -16,5 +16,27 @@
    <definition name="template" extends="base">  
        <put-attribute name="title" value="Dashboard" />  
        <put-attribute name="body" value="/WEB-INF/views/template.jsp" />  
-   </definition>  
+   </definition> 
+   <definition name="site" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/site.jsp" />  
+   </definition>   
+   <definition name="size" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/size.jsp" />  
+   </definition> 
+    <definition name="material" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/material.jsp" />  
+   </definition> 
+   <definition name="userType" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/userType.jsp" />  
+   </definition> 
+   <definition name="appUser" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/appUser.jsp" />  
+   </definition>
+      
+   
 </tiles-definitions>

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="user_type")
@@ -14,7 +16,8 @@ public class UserType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
-	
+	@NotNull(message="name is required")
+	@NotEmpty(message="name is required")
 	@Column(name="name")
 	private String name;
 

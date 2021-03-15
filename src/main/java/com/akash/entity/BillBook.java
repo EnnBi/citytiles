@@ -1,13 +1,22 @@
 package com.akash.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "bill_book")
@@ -19,46 +28,65 @@ public class BillBook {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	AppUser customer;
+
 	@Column(name = "address")
 	private String address;
+
 	@ManyToOne
 	@JoinColumn(name = "site")
 	Site site;
+
 	@ManyToOne
 	@JoinColumn(name = "vehicle")
 	Vehicle vehicle;
+
 	@Column(name = "reciept_number")
 	private String recieptNumber;
+
 	@Column(name = "unit")
 	private double unit;
+
 	@Column(name = "amount")
 	private double amount;
+
 	@Column(name = "loading_amount")
 	private double loadingAmount;
+
 	@Column(name = "unloading_amount")
 	private double unloadingAmount;
+
 	@Column(name = "total")
 	private double total;
+
 	@Column(name = "paid")
 	private double paid;
+
 	@Column(name = "balance")
 	private double balance;
-	@ManyToOne
+
+	@OneToMany
 	@JoinColumn(name = "sale")
-	Sales sales;
-	@ManyToOne
-	@JoinColumn(name = "loaders")
-	AppUser loaders;
-	@ManyToOne
-	@JoinColumn(name = "unloaders")
-	AppUser unloaders;
+	List<Sales> sales;
+
+	@NotNull(message = "Please select Loaders")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "BillBook_Loaders")
+	List<AppUser> loaders;
+
+	@NotNull(message = "Please select Unloaders")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "BillBook_Unloaders")
+	List<AppUser> unloaders;
+
 	@Column(name = "carriage")
 	private double carriage;
 
 	public long getId() {
 		return id;
 	}
-
+  
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -159,27 +187,27 @@ public class BillBook {
 		this.balance = balance;
 	}
 
-	public Sales getSales() {
+	public List<Sales> getSales() {
 		return sales;
 	}
 
-	public void setSales(Sales sales) {
+	public void setSales(List<Sales> sales) {
 		this.sales = sales;
 	}
 
-	public AppUser getLoaders() {
+	public List<AppUser> getLoaders() {
 		return loaders;
 	}
 
-	public void setLoaders(AppUser loaders) {
+	public void setLoaders(List<AppUser> loaders) {
 		this.loaders = loaders;
 	}
 
-	public AppUser getUnloaders() {
+	public List<AppUser> getUnloaders() {
 		return unloaders;
 	}
 
-	public void setUnloaders(AppUser unloaders) {
+	public void setUnloaders(List<AppUser> unloaders) {
 		this.unloaders = unloaders;
 	}
 

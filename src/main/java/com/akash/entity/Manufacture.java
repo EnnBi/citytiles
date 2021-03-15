@@ -28,13 +28,16 @@ public class Manufacture {
 	@ManyToOne
 	@JoinColumn(name="size")
 	Size size;
+	
 	 @Column(name="date")
 	LocalDate date;
 	
 	 @Column(name="total_quantity")
 	private double totalQuantity;
+	 
 	@Column(name="total_amount")
 	private double totalAmount;
+	
 	@OneToMany
 	@JoinColumn(name="labour_id")
 	List<LabourInfo> labourInfo;
