@@ -37,6 +37,27 @@
        <put-attribute name="title" value="Dashboard" />  
        <put-attribute name="body" value="/WEB-INF/views/appUser.jsp" />  
    </definition>
+   <definition name="userList" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/userList.jsp" />  
+   </definition>
+    <definition name="product" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/product.jsp" />  
+   </definition>
+    <definition name="vehicle" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/vehicle.jsp" />  
+   </definition>
+    <definition name="rawMaterial" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/rawMaterial.jsp" />  
+   </definition>
+    <definition name="rawList" extends="base">  
+       <put-attribute name="title" value="Dashboard" />  
+       <put-attribute name="body" value="/WEB-INF/views/rawList.jsp" />  
+   </definition>
+   
       
    
 </tiles-definitions>

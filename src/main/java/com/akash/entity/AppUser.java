@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 @Entity
 @Table(name="app_user")
 public class AppUser {
@@ -20,15 +22,18 @@ public class AppUser {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
-	@NotNull(message ="Name is required")
-	@NotEmpty(message="Name is required")
+	
+	@NotNull(message ="name is required")
+	@NotEmpty(message="name is required")
 	@Column(name="name")
 	private String name;
 	
+	@Pattern(regexp = "^\\d{10}$", message = "Please Enter the 10 digits correctly")
 	@NotNull(message ="contact is required")
 	@NotEmpty(message="contact is required")
 	@Column(name="contact")
 	private String contact;
+	
 	
 	@NotNull(message ="address is required")
 	@NotEmpty(message="address is required")
@@ -37,7 +42,7 @@ public class AppUser {
 	
 	@ManyToOne
 	@JoinColumn(name="user_type_id")
-	@NotNull(message ="userType is required")
+	@NotNull(message ="select any userType")
 	UserType userType;
 	
 	@NotNull(message ="Ledger Number is required")
@@ -50,9 +55,8 @@ public class AppUser {
 	@Column(name="account_number")
 	private String accountNumber;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name="site")
-	@NotNull(message ="site is required")
 	List<Site> sites;
 	
 	

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.akash.entity.MaterialType;
 import com.akash.entity.Size;
 import com.akash.repository.MaterialTypeRepository;
+import com.akash.repository.SiteRepository;
 
 @Controller
 @RequestMapping("/material-type")
@@ -51,7 +52,16 @@ public class MaterialTypeController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/material-type";
-		} else {
+		}
+		else if(materialTypeRepository.existsByName(materialType.getName()))
+		{
+			redirect.addFlashAttribute("material", materialType);
+			redirect.addFlashAttribute("fail", "Material Type Already Exixts");
+			return "redirect:/material-type";
+		}
+		
+		
+		else {
 
 			materialTypeRepository.save(materialType);
 			redirect.addFlashAttribute("success", "MaterialType Saved Successfully");
@@ -86,6 +96,13 @@ public class MaterialTypeController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/material-type/edit/"+materialType.getId();
+		}
+		
+		else if(materialTypeRepository.checkMaterialAlreadyExists(materialType.getName(), materialType.getId()) != null)
+		{
+			redirect.addFlashAttribute("material", materialType);
+			redirect.addFlashAttribute("fail","MaterialType Already Exists");
+			return "redirect:/material-type/edit/" +materialType.getId();
 		}
 		else
 		{

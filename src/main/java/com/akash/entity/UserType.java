@@ -16,6 +16,7 @@ public class UserType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
 	@NotNull(message="name is required")
 	@NotEmpty(message="name is required")
 	@Column(name="name")

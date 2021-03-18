@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="raw_material")
@@ -19,10 +21,12 @@ public class RawMaterial {
 	@Column(name="id")
 	private long id;
 	
+	@NotNull(message="select any material")
 	@ManyToOne
 	@JoinColumn(name="material_id")
 	MaterialType material;
 	
+	@NotNull(message="select any app user")
 	@ManyToOne
 	@JoinColumn(name="dealer")
 	AppUser dealer;
@@ -30,17 +34,31 @@ public class RawMaterial {
 	@Column(name="date")
 	LocalDate date;
 	
+	@NotEmpty(message="chalan number is required")
+	@NotNull(message ="chalan number is required")
 	@Column(name="chalan_number")
 	private String chalanNumber;
 	
+	//@NotEmpty(message="quantity is required")
+	@NotNull(message ="quantity is required")
 	@Column(name="quantity")
-	private double quantity;
+	private Double quantity;
 	
+	//@NotEmpty(message="amount is required")
+	@NotNull(message ="amount is required")
 	@Column(name="amount")
-	private double amount;
+	private Double amount;
 	
+	@NotEmpty(message="unit is required")
+	@NotNull(message ="unit is required")
 	@Column(name="unit")
 	private String unit;
+	
+	public RawMaterial()
+	{
+	 amount=0.0;
+	 quantity=0.0;
+	}
 
 	public long getId() {
 		return id;

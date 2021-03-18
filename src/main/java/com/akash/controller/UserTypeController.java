@@ -52,7 +52,15 @@ public class UserTypeController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/user-type";
-		} else {
+		} else if(userRepository.existsByName(userType.getName()))
+		{
+			redirect.addFlashAttribute("user", userType);
+			redirect.addFlashAttribute("fail", "User Type Already Exists");
+			return "redirect:/user-type";
+		}
+		
+		
+		else {
 
 			userRepository.save(userType);
 			redirect.addFlashAttribute("success", "UserType Saved Successfully");
@@ -85,6 +93,13 @@ public class UserTypeController {
 			redirect.addFlashAttribute("user", userType);
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
+			return "redirect:/user-type/edit/"+userType.getId();
+		}
+		
+		else if(userRepository.chechUserAlreadyExists(userType.getName(), userType.getId()) != null)
+		{
+			redirect.addFlashAttribute("user", userType);
+			redirect.addFlashAttribute("fail", "User Type Already Exists");
 			return "redirect:/user-type/edit/"+userType.getId();
 		}
 		else

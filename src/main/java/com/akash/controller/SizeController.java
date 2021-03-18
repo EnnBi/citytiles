@@ -52,7 +52,16 @@ public class SizeController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/size";
-		} else {
+		}
+		else if(sizeRepository.existsByName(size.getName()))
+		{
+			redirect.addFlashAttribute("size", size);
+			redirect.addFlashAttribute("fail", "Size Already Exists");
+			return "redirect:/size";
+		}
+		
+		
+		else {
 
 			sizeRepository.save(size);
 			redirect.addFlashAttribute("success", "Size Saved Successfully");
@@ -87,6 +96,12 @@ public class SizeController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/size/edit/"+size.getId();
+		}
+		else if(sizeRepository.checkSizeAlreadyExists(size.getName(), size.getId()) != null)
+		{
+			redirect.addFlashAttribute("size", size);
+			redirect.addFlashAttribute("fail", "Size Already Exists");
+			return "redirect:/size/edit/" +size.getId();
 		}
 		else
 		{

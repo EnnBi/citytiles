@@ -52,7 +52,14 @@ public class SiteController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/site";
-		} else {
+		}
+		else if(siteRepository.existsByName(site.getName()))
+		{
+			redirect.addFlashAttribute("site", site);
+			redirect.addFlashAttribute("fail","Site Already Exixts");
+			return "redirect:/site";
+		}
+		else {
 
 			siteRepository.save(site);
 			redirect.addFlashAttribute("success", "Site Saved Successfully");
@@ -87,6 +94,12 @@ public class SiteController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/site/edit/"+site.getId();
+		}
+		else if(siteRepository.checkSiteAlreadyExists(site.getName(),site.getId()) != null)
+		{
+			redirect.addFlashAttribute("site", site);
+			redirect.addFlashAttribute("fail","Site Already Exists");
+			return "redirect:/site/edit/" +site.getId();
 		}
 		else
 		{
