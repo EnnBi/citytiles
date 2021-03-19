@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.akash.entity.AppUser;
+import com.akash.repository.custom.AppUserCustomizedRepository;
 
-public interface AppUserRepository extends CrudRepository<AppUser, Long>,PagingAndSortingRepository<AppUser, Long>{
+public interface AppUserRepository extends CrudRepository<AppUser, Long>,AppUserCustomizedRepository {
 	
 	
 	public boolean existsByContactOrAccountNumber(String contact,String accountNumber);

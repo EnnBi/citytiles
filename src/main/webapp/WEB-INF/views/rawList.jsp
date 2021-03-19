@@ -3,6 +3,63 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div class="col-lg-12 grid-margin">
+
+  <form:form action="/raw-material/search" method="post" modelAttribute="rawMaterialSearch">
+		  
+		  <div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="input-group-addon label-left" id="basic-addon2">Dealer</label>
+							<form:select path="appUserId" class="form-control">
+								 <form:option value="">Select Any Dealer</form:option> 
+								<form:options items="${userList}" itemLabel="name"
+									itemValue="id"  />
+							</form:select>
+							
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="input-group-addon label-left" id="basic-addon2"> MaterialType</label>
+							<form:select path="materialTypeId"  class=" form-control">
+								  <form:option value="">Select Any Material Type</form:option> 
+								<form:options items="${rawList}" itemLabel="name"
+									itemValue="id" />
+							</form:select>
+					
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Start Date</label>
+							<div class="col-sm-9">
+								<form:input type= "date" class="form-control" path="startDate" />
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">End Date</label>
+							<div class="col-sm-9">
+								<form:input type="date" class="form-control" path="endDate" />
+		
+							</div>
+						</div>
+					</div>
+				</div>
+		  <div class="input-group-append">
+		    <button class="btn btn-success" type="submit" id="Search">Submit</button>
+		  </div>
+		  </form:form>
+		</div> 
+        
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Raw Material Table</h4>
@@ -39,7 +96,7 @@
 					<c:url var='updatelink' value="/raw-material/edit" />
 
 						<c:url var="deletelink" value="/raw-material/delete" />
-					<c:forEach items="${list}" var="templist">
+					<c:forEach items="${rawMaterial}" var="templist">
 						
 
 						<tbody>
@@ -63,7 +120,7 @@
 	            <c:if test="${totalPages>0}">
 				  <ul class="pagination">
 					  <c:if test="${currentPage !=1}">  
-					    <li class="page-item"><a class="page-link" href="/raw-material/pageno=${currentPage - 1}">Previous</a></li>
+					    <li class="page-item"><a class="page-link" href="/raw-material/${currentPage - 1}">Previous</a></li>
 					  </c:if>
 					  <c:forEach var="i"  begin="1" end="${totalPages}">
 						  	<c:choose>
@@ -72,13 +129,13 @@
 								</c:when>
 								<c:otherwise>
 										<li class="page-item"><a class="page-link" 
-											href="<c:url value="/raw-material/pageno=${i}"/>"        
+											href="<c:url value="/raw-material/${i}"/>"        
 											>${i}</a></li>
 								</c:otherwise>
 							</c:choose>				   
 					  </c:forEach>
 					  <c:if test="${currentPage!= totalPages}">
-					    	<li class="page-item"><a class="page-link" href="/raw-material/pageno=${currentPage + 1}">Next</a></li>
+					    	<li class="page-item"><a class="page-link" href="/raw-material/${currentPage + 1}">Next</a></li>
 					  </c:if>
 				  </ul>
 				  </c:if>

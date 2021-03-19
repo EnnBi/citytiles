@@ -27,15 +27,16 @@
 
 			<form:form action="${action}" modelAttribute="rawMaterial" method="post">
 				<form:hidden path="id" />
+				<form:hidden path="date" />
 				<input type="hidden" name="p" value="${currentPage}" />
 				<p class="card-description">Raw Material Info</p>
 				
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group row">
-							<span class="input-group-addon label-left" id="basic-addon2">Select Dealer</span>
+							<label class="input-group-addon label-left" id="basic-addon2">Select Dealer</label>
 							<form:select path="dealer" class="form-control">
-								 <form:option value=""></form:option>
+								 <form:option value="">select any dealer</form:option>
 								<form:options items="${userList}" itemLabel="name"
 									itemValue="id"  />
 							</form:select>
@@ -47,9 +48,9 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group row">
-							<span class="input-group-addon label-left" id="basic-addon2">Select Any MaterialType</span>
+							<label class="input-group-addon label-left" id="basic-addon2">Select Any MaterialType</label>
 							<form:select path="material" class=" form-control">
-								 <form:option value=""></form:option> 
+								 <form:option value="">select any material type</form:option> 
 								<form:options items="${rawList}" itemLabel="name"
 									itemValue="id" />
 							</form:select>

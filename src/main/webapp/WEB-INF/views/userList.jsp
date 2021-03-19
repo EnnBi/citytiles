@@ -3,6 +3,72 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div class="col-lg-12 grid-margin">
+  <form:form action="/app-user/search" method="post" modelAttribute="appUserSearch">
+		  
+		  <div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="input-group-addon label-left" id="basic-addon2">UserType</label>
+							<form:select path="userTypeId" class="form-control">
+								 <form:option value="">Select Any UserType</form:option> 
+								<form:options items="${UserList}" itemLabel="name"
+									itemValue="id"  />
+							</form:select>
+							
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Name</label>
+							<div class="col-sm-9">
+								<form:input type= "text" class="form-control" path="name" />
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Contact</label>
+							<div class="col-sm-9">
+								<form:input type= "text" class="form-control" path="contact" />
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Account Number</label>
+							<div class="col-sm-9">
+								<form:input type="text" class="form-control" path="accountNumber" />
+		
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Ledger Number</label>
+							<div class="col-sm-9">
+								<form:input type="text" class="form-control" path="ledgerNumber" />
+		
+							</div>
+						</div>
+					</div>
+				</div>
+		  <div class="input-group-append">
+		    <button class="btn btn-success" type="submit" id="Search">Submit</button>
+		  </div>
+		  </form:form>
+		</div> 
+
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">AppUser Table</h4>
@@ -37,7 +103,7 @@
 					<c:url var='updatelink' value="/app-user/edit" />
 
 						<c:url var="deletelink" value="/app-user/delete" />
-					<c:forEach items="${list}" var="templist">
+					<c:forEach items="${appUser}" var="templist">
 						
 
 						<tbody>
@@ -59,7 +125,7 @@
 	            <c:if test="${totalPages>0}">
 				  <ul class="pagination">
 					  <c:if test="${currentPage !=1}">  
-					    <li class="page-item"><a class="page-link" href="/app-user/pageno=${currentPage - 1}">Previous</a></li>
+					    <li class="page-item"><a class="page-link" href="/app-user/${currentPage - 1}">Previous</a></li>
 					  </c:if>
 					  <c:forEach var="i"  begin="1" end="${totalPages}">
 						  	<c:choose>
@@ -68,13 +134,13 @@
 								</c:when>
 								<c:otherwise>
 										<li class="page-item"><a class="page-link" 
-											href="<c:url value="/app-user/pageno=${i}"/>"        
+											href="<c:url value="/app-user/${i}"/>"        
 											>${i}</a></li>
 								</c:otherwise>
 							</c:choose>				   
 					  </c:forEach>
 					  <c:if test="${currentPage!= totalPages}">
-					    	<li class="page-item"><a class="page-link" href="/app-user/pageno=${currentPage + 1}">Next</a></li>
+					    	<li class="page-item"><a class="page-link" href="/app-user/${currentPage + 1}">Next</a></li>
 					  </c:if>
 				  </ul>
 				  </c:if>

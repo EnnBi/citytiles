@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.akash.entity.AppUser;
+import com.akash.entity.AppUserSearch;
+import com.akash.entity.RawMaterial;
+import com.akash.entity.RawMaterialSearch;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.SiteRepository;
 import com.akash.repository.UserTypeRepository;
@@ -34,6 +37,12 @@ public class AppUserController {
 	SiteRepository siteRepository;
 	@Autowired
 	UserTypeRepository userRepository;
+	
+	int from = 0;
+	int total = 0;
+	int ROWS = 10;
+	Long records = 0L;
+	
 	@GetMapping
 	public String get(Model model)
 	{
@@ -71,12 +80,23 @@ public class AppUserController {
 			return "redirect:/app-user";
 		}
 	}
-	@GetMapping("/list")
-	public String list(Model model)
-	{
-		int page=1;
-		pagination(page, model);
-	
+	@GetMapping("/search")
+	public String list(Model model,HttpSession session) {
+		fillModel(model);
+		model.addAttribute("appUserSearch", new AppUserSearch());
+		//model.addAttribute("totalPages", 1);
+		session.setAttribute("currentPage", 1);
+		
+
+		return "userList";
+	}
+
+	@PostMapping("/search")
+	public String searchOrders(AppUserSearch appUserSearch, Model model, HttpSession session) {
+
+		int page = 1;
+		session.setAttribute("appUserSearch",appUserSearch);
+		pagination(page, appUserSearch, model, session);
 		return "userList";
 	}
 	@GetMapping("/edit/{id}")
@@ -90,8 +110,8 @@ public class AppUserController {
 			model.addAttribute("org.springframework.validation.BindingResult.user", model.asMap().get("result"));
 		}
 		model.addAttribute("edit", true);
-		int page = (int) session.getAttribute("currentPage");
-		pagination(page, model);
+		//int page = (int) session.getAttribute("currentPage");
+		//pagination(page, model);
 		return "appUser";
 	}
 	
@@ -121,7 +141,7 @@ public class AppUserController {
 		appUserRepository.save(appUser);
 			redirect.addFlashAttribute("success","User Updated Successfully");
 			
-			return "redirect:/app-user/pageno=" + page;
+			return "redirect:/app-user/" + page;
 		}
 	}
 	
@@ -131,7 +151,7 @@ public class AppUserController {
 		int page= (int) session.getAttribute("currentPage");
 		appUserRepository.deleteById(id);
 		redirect.addFlashAttribute("success","User Deleted Successfully");
-		return "redirect:/app-user/pageno=" +page;
+		return "redirect:/app-user/" +page;
 	}
 		
 	
@@ -141,21 +161,27 @@ public class AppUserController {
 		model.addAttribute("siteList", siteRepository.findAll());
 	}
 
-	public void pagination(int page, Model model) {
+	public void pagination(int page, AppUserSearch appUserSearch, Model model, HttpSession session) {
 
-		page = page <= 1 ? 0 : page - 1;
-		Pageable pageable = PageRequest.of(page, 2);
-		Page<AppUser> list =appUserRepository.findAll(pageable);
-		System.out.println(list.getContent());
-		model.addAttribute("list", list.getContent());
-		model.addAttribute("currentPage", page + 1);
-
-		model.addAttribute("totalPages", list.getTotalPages());
-	}
-	@GetMapping("/pageno={page}")
-	public String paginate(@PathVariable("page") int page, Model model, HttpSession session) {
+		page = (page > 0) ? page : 1;
+		from = ROWS * (page - 1);
+		records = (long) appUserRepository.searchAppUsersCount(appUserSearch);
+		total = (int) Math.ceil((double) records / (double) ROWS);
+		List<AppUser> appUsers = appUserRepository.searchAppUserPaginated(appUserSearch, from);
+		model.addAttribute("totalPages", total);
 		session.setAttribute("currentPage", page);
-		pagination(page, model);
+		model.addAttribute("appUser",appUsers);
+		model.addAttribute("appUserSearch", appUserSearch);
+		System.out.println("total records: " + records + " total Pages: " + total + " Current page: " + page);
+		fillModel(model);
+
+	}
+	@GetMapping("/{page}")
+	public String showAppUser(@PathVariable("page") int page, Model model, HttpSession session) {
+		AppUserSearch appUserSearch =  (AppUserSearch) session.getAttribute("appUserSearch");
+		
+		pagination(page, appUserSearch, model, session);
 		return "userList";
+
 	}
 }

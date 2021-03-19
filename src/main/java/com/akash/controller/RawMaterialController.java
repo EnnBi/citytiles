@@ -1,6 +1,7 @@
 package com.akash.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -19,11 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.akash.entity.AppUser;
 import com.akash.entity.RawMaterial;
+import com.akash.entity.RawMaterialSearch;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.MaterialTypeRepository;
 import com.akash.repository.RawMaterialRepository;
+import com.akash.util.Constants;
 
 @Controller
 @RequestMapping("/raw-material")
@@ -35,6 +37,12 @@ public class RawMaterialController {
 	@Autowired
 	AppUserRepository userRepository;
 
+	
+	int from = 0;
+	int total = 0;
+	int ROWS = 10;
+	Long records = 0L;
+	
 	@GetMapping
 	public String add(Model model) {
 
@@ -76,14 +84,25 @@ public class RawMaterialController {
 		}
 	}
 
-	@GetMapping("/list")
-	public String list(Model model) {
-		int page = 1;
-		pagination(page, model);
+	@GetMapping("/search")
+	public String list(Model model,HttpSession session) {
+		fillModel(model);
+		model.addAttribute("rawMaterialSearch", new RawMaterialSearch());
+		//model.addAttribute("totalPages", 1);
+		session.setAttribute("currentPage", 1);
+		
 
 		return "rawList";
 	}
 
+	@PostMapping("/search")
+	public String searchOrders(RawMaterialSearch rawMaterialSearch, Model model, HttpSession session) {
+
+		int page = 1;
+		session.setAttribute("rawMaterialSearch", rawMaterialSearch);
+		pagination(page, rawMaterialSearch, model, session);
+		return "rawList";
+	}
 	@GetMapping("/edit/{id}")
 	public String update(@PathVariable("id") long id, Model model, HttpSession session) {
 		fillModel(model);
@@ -95,7 +114,7 @@ public class RawMaterialController {
 		}
 		model.addAttribute("edit", true);
 		int page = (int) session.getAttribute("currentPage");
-		pagination(page, model);
+		//pagination(page, model);
 		return "rawMaterial";
 	}
 
@@ -103,7 +122,7 @@ public class RawMaterialController {
 	public String update(@Valid @ModelAttribute("rawMaterial") RawMaterial rawMaterial, BindingResult result,
 			RedirectAttributes redirect, HttpSession session, Model model) {
 
-		int page = (int) session.getAttribute("currentPage");
+		 int page = (int) session.getAttribute("currentPage");
 		// pagination(page,model);
 
 		if (result.hasErrors()) {
@@ -113,52 +132,55 @@ public class RawMaterialController {
 			return "redirect:/raw-material/edit/" + rawMaterial.getId();
 		}
 
-		/*
-		 * else if(appUserRepository.chechUserExistsAlready(appUser.getContact(),
-		 * appUser.getAccountNumber(), appUser.getId()) !=null) {
-		 * redirect.addFlashAttribute("user", appUser);
-		 * redirect.addFlashAttribute("fail", "User Alredy Exists"); return
-		 * "redirect:/app-user/edit/"+appUser.getId(); }
-		 */
+		else if(rawMaterialRepository.checkRawMaterialAlreadyExists(rawMaterial.getChalanNumber(), rawMaterial.getId()) != null)
+		{
+			redirect.addFlashAttribute("rawMaterial",rawMaterial);
+			redirect.addFlashAttribute("fail", "Raw Material Already Exists");
+			return "redirect:/raw-material/edit/" +rawMaterial.getId();
+		}
 		else {
 			rawMaterialRepository.save(rawMaterial);
 			redirect.addFlashAttribute("success", "Raw Material Updated Successfully");
 
-			return "redirect:/raw-material/pageno=" + page;
+			return "redirect:/raw-material/" +page;
 		}
 	}
 
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") long id, HttpSession session, RedirectAttributes redirect) {
 
-		int page = (int) session.getAttribute("currentPage");
+		 int page = (int) session.getAttribute("currentPage"); 
 		rawMaterialRepository.deleteById(id);
 		redirect.addFlashAttribute("success", "Raw Material Deleted Successfully");
-		return "redirect:/raw-material/pageno=" + page;
+		return "redirect:/raw-material/" +page;
 	}
 
 	private void fillModel(Model model) {
-		model.addAttribute("userList", userRepository.findAll());
+		model.addAttribute("userList", userRepository.findByUserType_Name(Constants.DEALER));
 		model.addAttribute("rawList", materialRepository.findAll());
 	}
 
-	public void pagination(int page, Model model) {
+	public void pagination(int page, RawMaterialSearch rawMaterialSearch, Model model, HttpSession session) {
 
-		page = page <= 1 ? 0 : page - 1;
-		Pageable pageable = PageRequest.of(page, 2);
-		Page<RawMaterial> list = rawMaterialRepository.findAll(pageable);
-		System.out.println(list.getContent());
-		model.addAttribute("list", list.getContent());
-		model.addAttribute("currentPage", page + 1);
-
-		model.addAttribute("totalPages", list.getTotalPages());
-	}
-
-	@GetMapping("/pageno={page}")
-	public String paginate(@PathVariable("page") int page, Model model, HttpSession session) {
+		page = (page > 0) ? page : 1;
+		from = ROWS * (page - 1);
+		records = (long) rawMaterialRepository.searchRawMaterialsCount(rawMaterialSearch);
+		total = (int) Math.ceil((double) records / (double) ROWS);
+		List<RawMaterial> rawMaterials = rawMaterialRepository.searchRawMaterialPaginated(rawMaterialSearch, from);
+		model.addAttribute("totalPages", total);
 		session.setAttribute("currentPage", page);
-		pagination(page, model);
-		return "rawList";
-	}
+		model.addAttribute("rawMaterial", rawMaterials);
+		model.addAttribute("rawMaterialSearch", rawMaterialSearch);
+		System.out.println("total records: " + records + " total Pages: " + total + " Current page: " + page);
+		fillModel(model);
 
+	}
+	@GetMapping("/{page}")
+	public String showRawMaterial(@PathVariable("page") int page, Model model, HttpSession session) {
+		RawMaterialSearch rawMaterialSearch =  (RawMaterialSearch) session.getAttribute("rawMaterialSearch");
+		
+		pagination(page, rawMaterialSearch, model, session);
+		return "rawList";
+
+}
 }
