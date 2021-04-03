@@ -26,13 +26,13 @@ public class Sales {
 	Size size;
 	
 	@Column(name="quantity")
-	private double quantity;
+	private Double quantity;
 	
 	@Column(name="unit_price")
-	private long unitPrice;
+	private Long unitPrice;
 	
 	@Column(name="amount")
-	private double amount;
+	private Double amount;
 
 	public long getId() {
 		return id;
@@ -58,27 +58,27 @@ public class Sales {
 		this.size = size;
 	}
 
-	public double getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 
-	public long getUnitPrice() {
+	public Long getUnitPrice() {
 		return unitPrice;
 	}
 
-	public void setUnitPrice(long unitPrice) {
+	public void setUnitPrice(Long unitPrice) {
 		this.unitPrice = unitPrice;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 

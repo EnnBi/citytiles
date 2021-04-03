@@ -1,13 +1,25 @@
 package com.akash.entity;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "bill_book")
@@ -19,46 +31,72 @@ public class BillBook {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	AppUser customer;
-	@Column(name = "address")
-	private String address;
+
 	@ManyToOne
 	@JoinColumn(name = "site")
 	Site site;
+
 	@ManyToOne
 	@JoinColumn(name = "vehicle")
 	Vehicle vehicle;
+
 	@Column(name = "reciept_number")
-	private String recieptNumber;
+	private String receiptNumber;
+
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@Column(name="Date")
+	private LocalDate date;
+	
 	@Column(name = "unit")
-	private double unit;
-	@Column(name = "amount")
-	private double amount;
+	private Double unit;
+
+
 	@Column(name = "loading_amount")
-	private double loadingAmount;
+	private Double loadingAmount;
+
 	@Column(name = "unloading_amount")
-	private double unloadingAmount;
+	private Double unloadingAmount;
+
 	@Column(name = "total")
-	private double total;
+	private Double total;
+
 	@Column(name = "paid")
-	private double paid;
+	private Double paid;
+
 	@Column(name = "balance")
-	private double balance;
-	@ManyToOne
-	@JoinColumn(name = "sale")
-	Sales sales;
-	@ManyToOne
-	@JoinColumn(name = "loaders")
-	AppUser loaders;
-	@ManyToOne
-	@JoinColumn(name = "unloaders")
-	AppUser unloaders;
+	private Double balance;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "Bill_Book")
+	List<Sales> sales;
+
+	@NotNull(message = "Please select Loaders")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "BillBook_Loaders")
+	List<AppUser> loaders;
+
+	@NotNull(message = "Please select Unloaders")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "BillBook_Unloaders")
+	List<AppUser> unloaders;
+
 	@Column(name = "carriage")
-	private double carriage;
+	private Double carraige;
+	
+	@Column(name="Loading_Amount_Per_Head")
+	private Double loadingAmountPerHead;
+	
+	@Column(name="Unloading_Amount_Per_Head")
+	private Double unloadingAmountPerHead;
+
 
 	public long getId() {
 		return id;
 	}
-
+  
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -69,14 +107,6 @@ public class BillBook {
 
 	public void setCustomer(AppUser customer) {
 		this.customer = customer;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public Site getSite() {
@@ -95,109 +125,126 @@ public class BillBook {
 		this.vehicle = vehicle;
 	}
 
-	public String getRecieptNumber() {
-		return recieptNumber;
+	public String getReceiptNumber() {
+		return receiptNumber;
 	}
 
-	public void setRecieptNumber(String recieptNumber) {
-		this.recieptNumber = recieptNumber;
+	public void setReceiptNumber(String receiptNumber) {
+		this.receiptNumber = receiptNumber;
 	}
 
-	public double getUnit() {
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public Double getUnit() {
 		return unit;
 	}
 
-	public void setUnit(double unit) {
+	public void setUnit(Double unit) {
 		this.unit = unit;
 	}
 
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public double getLoadingAmount() {
+	public Double getLoadingAmount() {
 		return loadingAmount;
 	}
 
-	public void setLoadingAmount(double loadingAmount) {
+	public void setLoadingAmount(Double loadingAmount) {
 		this.loadingAmount = loadingAmount;
 	}
 
-	public double getUnloadingAmount() {
+	public Double getUnloadingAmount() {
 		return unloadingAmount;
 	}
 
-	public void setUnloadingAmount(double unloadingAmount) {
+	public void setUnloadingAmount(Double unloadingAmount) {
 		this.unloadingAmount = unloadingAmount;
 	}
 
-	public double getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(double total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public double getPaid() {
+	public Double getPaid() {
 		return paid;
 	}
 
-	public void setPaid(double paid) {
+	public void setPaid(Double paid) {
 		this.paid = paid;
 	}
 
-	public double getBalance() {
+	public Double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(double balance) {
+	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
 
-	public Sales getSales() {
+	public List<Sales> getSales() {
 		return sales;
 	}
 
-	public void setSales(Sales sales) {
+	public void setSales(List<Sales> sales) {
 		this.sales = sales;
 	}
 
-	public AppUser getLoaders() {
+	public List<AppUser> getLoaders() {
 		return loaders;
 	}
 
-	public void setLoaders(AppUser loaders) {
+	public void setLoaders(List<AppUser> loaders) {
 		this.loaders = loaders;
 	}
 
-	public AppUser getUnloaders() {
+	public List<AppUser> getUnloaders() {
 		return unloaders;
 	}
 
-	public void setUnloaders(AppUser unloaders) {
+	public void setUnloaders(List<AppUser> unloaders) {
 		this.unloaders = unloaders;
 	}
 
-	public double getCarriage() {
-		return carriage;
+	public Double getCarraige() {
+		return carraige;
 	}
 
-	public void setCarriage(double carriage) {
-		this.carriage = carriage;
+	public void setCarraige(Double carraige) {
+		this.carraige = carraige;
+	}
+	
+	public Double getLoadingAmountPerHead() {
+		return loadingAmountPerHead;
 	}
 
+	public void setLoadingAmountPerHead(Double loadingAmountPerHead) {
+		this.loadingAmountPerHead = loadingAmountPerHead;
+	}
+
+	public Double getUnloadingAmountPerHead() {
+		return unloadingAmountPerHead;
+	}
+
+	public void setUnloadingAmountPerHead(Double unloadingAmountPerHead) {
+		this.unloadingAmountPerHead = unloadingAmountPerHead;
+	}
+
+	
 	@Override
 	public String toString() {
-		return "BillBook [id=" + id + ", customer=" + customer + ", address=" + address + ", site=" + site
-				+ ", vehicle=" + vehicle + ", recieptNumber=" + recieptNumber + ", unit=" + unit + ", amount=" + amount
+		return "BillBook [id=" + id + ", customer=" + customer + ", site=" + site
+				+ ", vehicle=" + vehicle + ", receiptNumber=" + receiptNumber + ", unit=" + unit 
 				+ ", loadingAmount=" + loadingAmount + ", unloadingAmount=" + unloadingAmount + ", total=" + total
 				+ ", paid=" + paid + ", balance=" + balance + ", sales=" + sales + ", loaders=" + loaders
-				+ ", unloaders=" + unloaders + ", carriage=" + carriage + "]";
+				+ ", unloaders=" + unloaders + ", carriage=" + carraige + "]";
 	}
 
 }

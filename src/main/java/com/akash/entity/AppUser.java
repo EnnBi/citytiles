@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 @Entity
 @Table(name="app_user")
 public class AppUser {
@@ -19,23 +23,41 @@ public class AppUser {
 	@Column(name="id")
 	private long id;
 	
+	@NotNull(message ="name is required")
+	@NotEmpty(message="name is required")
 	@Column(name="name")
 	private String name;
+	
+	@Pattern(regexp = "^\\d{10}$", message = "Please Enter the 10 digits correctly")
+	@NotNull(message ="contact is required")
+	@NotEmpty(message="contact is required")
 	@Column(name="contact")
 	private String contact;
+	
+	
+	@NotNull(message ="address is required")
+	@NotEmpty(message="address is required")
 	@Column(name="address")
 	private String address;
+	
 	@ManyToOne
 	@JoinColumn(name="user_type_id")
+	@NotNull(message ="select any userType")
 	UserType userType;
 	
+	@NotNull(message ="Ledger Number is required")
+	@NotEmpty(message="Ledger Number is required")
 	@Column(name="ledger_number")
 	private String ledgerNumber;
+	
 	@Column(name="account_number")
 	private String accountNumber;
-	@OneToMany
+	
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name="site")
 	List<Site> sites;
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -84,14 +106,36 @@ public class AppUser {
 	public void setSites(List<Site> sites) {
 		this.sites = sites;
 	}
+	
+	public String getLabelName(){
+		return this.name+" "+this.address;
+	}
 	@Override
 	public String toString() {
 		return "AppUser [id=" + id + ", name=" + name + ", contact=" + contact + ", address=" + address + ", userType="
 				+ userType + ", ledgerNumber=" + ledgerNumber + ", accountNumber=" + accountNumber + ", sites=" + sites
 				+ "]";
 	}
-	
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AppUser other = (AppUser) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 	
 
 }

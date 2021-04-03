@@ -23360,7 +23360,7 @@ code {
 .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead,
 .tt-query,
 .tt-hint {
-  border: 1px solid #f3f3f3;
+  border: 1px solid #cfcfcf;
   font-family: "roboto-regular", sans-serif;
   font-size: 0.75rem;
   padding: 0.56rem 0.75rem;

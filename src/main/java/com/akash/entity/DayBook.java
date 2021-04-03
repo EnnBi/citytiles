@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name="day_book")
 public class DayBook {
@@ -18,20 +20,33 @@ public class DayBook {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private long id;
+	
 	@ManyToOne
 	@JoinColumn(name="customerId")
-	AppUser customer;
+	AppUser user;
 	
 	@Column(name="transaction_number")
 	private String transactionNumber;
+	
 	@Column(name="transaction_type")
 	private String transactionType;
+	
+	@Column(name="Transaction_By")
+	private String transactionBy;
+	
 	@Column(name="account_number")
 	private String accountNumber;
+	
 	@Column(name="responsible_person")
 	private String responsiblePerson;
+	
+	@Column(name="Amount")
+	private Double amount;
+	
 	@Column(name="date")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	LocalDate date;
+	
 	@Column(name="status")
 	private String status;
 
@@ -43,13 +58,6 @@ public class DayBook {
 		this.id = id;
 	}
 
-	public AppUser getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(AppUser customer) {
-		this.customer = customer;
-	}
 
 	public String getTransactionNumber() {
 		return transactionNumber;
@@ -99,13 +107,30 @@ public class DayBook {
 		this.status = status;
 	}
 
-	@Override
-	public String toString() {
-		return "DayBook [id=" + id + ", customer=" + customer + ", transactionNumber=" + transactionNumber
-				+ ", transactionType=" + transactionType + ", accountNumber=" + accountNumber + ", responsiblePerson="
-				+ responsiblePerson + ", date=" + date + ", status=" + status + "]";
+	public Double getAmount() {
+		return amount;
 	}
-	
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+
+	public String getTransactionBy() {
+		return transactionBy;
+	}
+
+	public void setTransactionBy(String transactionBy) {
+		this.transactionBy = transactionBy;
+	}
+
 	
 	
 	

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="material_type")
@@ -15,6 +17,8 @@ public class MaterialType {
 	@Column(name="id")
 	private long id;
 	
+	@NotNull(message ="Name is required")
+	@NotEmpty(message="Name is required")
 	@Column(name="name")
 	private String name;
 
@@ -38,6 +42,30 @@ public class MaterialType {
 	public String toString() {
 		return "MaterialType [id=" + id + ", name=" + name + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MaterialType other = (MaterialType) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	
 	
 	
 

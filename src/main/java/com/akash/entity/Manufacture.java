@@ -3,6 +3,7 @@ package com.akash.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,34 +14,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
-@Table(name="manufacture")
+@Table(name = "manufacture")
 public class Manufacture {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private long id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="product_id")
+	@JoinColumn(name = "product")
 	Product product;
-	
+
 	@ManyToOne
-	@JoinColumn(name="size")
+	@JoinColumn(name = "size")
 	Size size;
-	 @Column(name="date")
+
+	@Column(name = "date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	LocalDate date;
-	
-	 @Column(name="total_quantity")
-	private double totalQuantity;
-	@Column(name="total_amount")
-	private double totalAmount;
-	@OneToMany
-	@JoinColumn(name="labour_id")
+
+	@Column(name = "total_quantity")
+	private Double totalQuantity;
+
+	@Column(name = "total_amount")
+	private Double totalAmount;
+
+	@Column(name = "Cost_Per_Unit")
+	private Double cpu;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "labour_id")
 	List<LabourInfo> labourInfo;
-	
-	@Column(name="cement")
-	private int cement;
+
+	@Column(name = "cement")
+	private Integer cement;
 
 	public long getId() {
 		return id;
@@ -74,19 +84,19 @@ public class Manufacture {
 		this.date = date;
 	}
 
-	public double getTotalQuantity() {
+	public Double getTotalQuantity() {
 		return totalQuantity;
 	}
 
-	public void setTotalQuantity(double totalQuantity) {
+	public void setTotalQuantity(Double totalQuantity) {
 		this.totalQuantity = totalQuantity;
 	}
 
-	public double getTotalAmount() {
+	public Double getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(double totalAmount) {
+	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -98,12 +108,20 @@ public class Manufacture {
 		this.labourInfo = labourInfo;
 	}
 
-	public int getCement() {
+	public Integer getCement() {
 		return cement;
 	}
 
-	public void setCement(int cement) {
+	public void setCement(Integer cement) {
 		this.cement = cement;
+	}
+
+	public Double getCpu() {
+		return cpu;
+	}
+
+	public void setCpu(Double cpu) {
+		this.cpu = cpu;
 	}
 
 	@Override
@@ -112,7 +130,5 @@ public class Manufacture {
 				+ ", totalQuantity=" + totalQuantity + ", totalAmount=" + totalAmount + ", labourInfo=" + labourInfo
 				+ ", cement=" + cement + "]";
 	}
-	
-	
 
 }

@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="vehicle")
@@ -17,11 +19,14 @@ public class Vehicle {
 	@Column(name="id")
 	private long id;
 	
+	@NotNull(message ="number is required")
+	@NotEmpty(message="number is required")
 	@Column(name="number")
 	private String number;
 	
 	@ManyToOne
 	@JoinColumn(name="appUser_id")
+	@NotNull(message="select any driver")
 	AppUser driver;
 
 	public long getId() {

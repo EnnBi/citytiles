@@ -258,7 +258,7 @@
 	<!-- Plugin js for this page-->
 	<script
 		src="/resources/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
-	<script src="/resources/vendors/chart.js/Chart.min.js"></script>
+	
 	<script src="/resources/vendors/raphael/raphael.min.js"></script>
 	<script src="/resources/vendors/morris.js/morris.min.js"></script>
 	<script

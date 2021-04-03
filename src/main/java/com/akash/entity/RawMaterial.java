@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="raw_material")
@@ -19,10 +21,12 @@ public class RawMaterial {
 	@Column(name="id")
 	private long id;
 	
+	@NotNull(message="select any material")
 	@ManyToOne
 	@JoinColumn(name="material_id")
 	MaterialType material;
 	
+	@NotNull(message="select any app user")
 	@ManyToOne
 	@JoinColumn(name="dealer")
 	AppUser dealer;
@@ -30,17 +34,31 @@ public class RawMaterial {
 	@Column(name="date")
 	LocalDate date;
 	
+	@NotEmpty(message="chalan number is required")
+	@NotNull(message ="chalan number is required")
 	@Column(name="chalan_number")
 	private String chalanNumber;
 	
+	//@NotEmpty(message="quantity is required")
+	@NotNull(message ="quantity is required")
 	@Column(name="quantity")
-	private double quantity;
+	private Double quantity;
 	
+	//@NotEmpty(message="amount is required")
+	@NotNull(message ="amount is required")
 	@Column(name="amount")
-	private double amount;
+	private Double amount;
 	
+	@NotEmpty(message="unit is required")
+	@NotNull(message ="unit is required")
 	@Column(name="unit")
 	private String unit;
+	
+	public RawMaterial()
+	{
+	 amount=0.0;
+	 quantity=0.0;
+	}
 
 	public long getId() {
 		return id;
@@ -112,6 +130,30 @@ public class RawMaterial {
 				+ ", chalanNumber=" + chalanNumber + ", quantity=" + quantity + ", amount=" + amount + ", unit=" + unit
 				+ "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RawMaterial other = (RawMaterial) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	
 	
 	
 	
