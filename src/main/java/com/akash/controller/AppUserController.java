@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.akash.entity.AppUser;
 import com.akash.entity.AppUserSearch;
 import com.akash.repository.AppUserRepository;
+import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.SiteRepository;
 import com.akash.repository.UserTypeRepository;
+import com.akash.util.Constants;
 
 @Controller
 @RequestMapping("/user")
@@ -33,10 +36,12 @@ public class AppUserController {
 	SiteRepository siteRepository;
 	@Autowired
 	UserTypeRepository userRepository;
+	@Autowired
+	LabourGroupRepository labourGroupRepository;
 	
 	int from = 0;
 	int total = 0;
-	int ROWS = 10;
+	int ROWS = Constants.ROWS;
 	Long records = 0L;
 	
 	@GetMapping
@@ -61,7 +66,7 @@ public class AppUserController {
 			redirect.addFlashAttribute("result", result);
 			redirect.addFlashAttribute("fail", "Please enter all the field correctly");
 			return "redirect:/user";
-		}else if (appUserRepository.existsByContactOrAccountNumber(appUser.getContact(), appUser.getAccountNumber()))
+		}else if (appUserRepository.existsByContact(appUser.getContact()))
 		{
 			redirect.addFlashAttribute("user", appUser);
 			redirect.addFlashAttribute("fail", "Person Already Exists");
@@ -123,7 +128,7 @@ public class AppUserController {
 			return "redirect:/user/edit/"+appUser.getId();
 		}
 		
-		else if(appUserRepository.chechUserExistsAlready(appUser.getContact(), appUser.getAccountNumber(), appUser.getId()) !=null)
+		else if(appUserRepository.chechUserExistsAlready(appUser.getContact(), appUser.getId()) !=null)
 		{
 			redirect.addFlashAttribute("user", appUser);
 			redirect.addFlashAttribute("fail", "Person Alredy Exists");
@@ -147,11 +152,28 @@ public class AppUserController {
 		return "redirect:/user/pageno=" +page;
 	}
 		
+	@GetMapping("/customer")
+	public ResponseEntity<?> saveCustomer(@RequestParam("name") String name,
+										  @RequestParam("contact") String contact,
+										  @RequestParam("address") String address,
+										  @RequestParam("ledgerNumber") String ledgerNumber){
+		AppUser appUser=new AppUser();
+		appUser.setName(name);
+		appUser.setContact(contact);
+		appUser.setAddress(address);
+		appUser.setLedgerNumber(ledgerNumber);
+		appUser.setUserType(userRepository.findByName(Constants.CUSTOMER));
+		appUser.setActive(true);
+		appUser=appUserRepository.save(appUser);
+		return ResponseEntity.ok(appUser);
+	}
+	
 	
 	private void fillModel(Model model)
 	{
 		model.addAttribute("UserList", userRepository.findAll());
 		model.addAttribute("siteList", siteRepository.findAll());
+		model.addAttribute("labourGroups", labourGroupRepository.findAll());
 	}
 
 	public void pagination(int page, AppUserSearch appUserSearch, Model model, HttpSession session) {
@@ -180,5 +202,10 @@ public class AppUserController {
 	@GetMapping("/{id}/sites")
 	public ResponseEntity<?> findSitesOfUser(@PathVariable long id){
 		return ResponseEntity.ok(appUserRepository.findSitesOnUserId(id));
+	}
+	
+	@GetMapping("/labour-group/{id}")
+	public ResponseEntity<?> findLaboursOnLabourGroup(@PathVariable long id){
+		return ResponseEntity.ok(appUserRepository.findByUserType_NameAndLabourGroup_IdAndActive(Constants.LABOUR,id,true));
 	}
 }

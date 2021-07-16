@@ -33,7 +33,7 @@ public class Manufacture {
 	Size size;
 
 	@Column(name = "date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	LocalDate date;
 
 	@Column(name = "total_quantity")
@@ -52,6 +52,10 @@ public class Manufacture {
 	@Column(name = "cement")
 	private Integer cement;
 
+	@ManyToOne
+	@JoinColumn(name="Labour_Group")
+	LabourGroup labourGroup;
+	
 	public long getId() {
 		return id;
 	}
@@ -122,6 +126,14 @@ public class Manufacture {
 
 	public void setCpu(Double cpu) {
 		this.cpu = cpu;
+	}
+
+	public LabourGroup getLabourGroup() {
+		return labourGroup;
+	}
+
+	public void setLabourGroup(LabourGroup labourGroup) {
+		this.labourGroup = labourGroup;
 	}
 
 	@Override

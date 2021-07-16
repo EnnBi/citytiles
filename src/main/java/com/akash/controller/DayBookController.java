@@ -40,7 +40,7 @@ public class DayBookController {
 	public String add(Model model) {
 		model.addAttribute("dayBook", new DayBook());
 		model.addAttribute("userTypes", userTypeRepository.findAll());
-		model.addAttribute("accounts",appUserRepository.findByUserType_Name(Constants.OWNER));
+		model.addAttribute("accounts",appUserRepository.findByUserType_NameAndActive(Constants.OWNER,true));
 		return "daybook";
 	} 
 
@@ -48,8 +48,10 @@ public class DayBookController {
 	public String save(@ModelAttribute("dayBook") DayBook dayBook, Model model,RedirectAttributes redirectAttributes) {
 		if(dayBook.getTransactionType().equals(Constants.EXPENDITURE) && dayBook.getTransactionBy().equals(Constants.CHEQUE)){
 			DayBook prevDayBook = daybookRepository.findByTransactionNumber(dayBook.getTransactionNumber());
-			prevDayBook.setStatus(Constants.SUCCESS);
-			daybookRepository.save(prevDayBook);
+			if(prevDayBook!=null){
+				prevDayBook.setStatus(Constants.SUCCESS);
+				daybookRepository.save(prevDayBook);
+			}
 		}
 			daybookRepository.save(dayBook);
 			redirectAttributes.addFlashAttribute("success","Entry saved successfully");
@@ -63,10 +65,11 @@ public class DayBookController {
 		return "daybook";
 	}
 
-	@GetMapping("/delete")
-	public String delete(@PathVariable("id") long id) {
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable("id") long id,RedirectAttributes  redirectAttributes) {
 		daybookRepository.deleteById(id);
-		return null;
+		redirectAttributes.addFlashAttribute("success","Entry deleted successfully");
+		return "redirect:/day-book/search";
 	}
 
 	@GetMapping("/search")
@@ -108,7 +111,7 @@ public class DayBookController {
 	
 	private void fillModel(Model model) {
 		model.addAttribute("userTypes", userTypeRepository.findAll());
-		model.addAttribute("accounts",appUserRepository.findByUserType_Name(Constants.OWNER));
+		model.addAttribute("accounts",appUserRepository.findByUserType_NameAndActive(Constants.OWNER,true));
 		model.addAttribute("customers", appUserRepository.findAll());
 	}
 	

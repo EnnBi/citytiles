@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -117,8 +118,13 @@ public class VehicleController {
 	public String delete(@PathVariable("id") long id, HttpSession session, RedirectAttributes redirect) {
 
 		int page = (int) session.getAttribute("currentPage");
-		vehicleRepository.deleteById(id);
-		redirect.addFlashAttribute("success", "Vehicle Deleted Successfully");
+		try {
+			vehicleRepository.deleteById(id);
+			redirect.addFlashAttribute("success", "Vehicle Deleted Successfully");
+		} catch (Exception e) {
+			redirect.addFlashAttribute("fail", "Vehicle cannot be deleted");
+		}
+		
 		return "redirect:/vehicle/pageno=" + page;
 	}
 
@@ -130,6 +136,11 @@ public class VehicleController {
 		return "vehicle";
 	}
 
+	@GetMapping("/{id}/driver")
+	public ResponseEntity<?> getDriver(@PathVariable("id") long id){
+		return ResponseEntity.ok(vehicleRepository.findById(id).get().getDriver());
+	}
+	
 	public void pagination(int page, Model model) {
 
 		page = page <= 1 ? 0 : page - 1;
@@ -138,7 +149,7 @@ public class VehicleController {
 		System.out.println(list.getContent());
 		model.addAttribute("list", list.getContent());
 		model.addAttribute("currentPage", page + 1);
-		model.addAttribute("userList", userRepository.findByUserType_Name(Constants.DRIVER));
+		model.addAttribute("userList", userRepository.findByUserType_NameAndActive(Constants.DRIVER,true));
 
 		model.addAttribute("totalPages", list.getTotalPages());
 	}

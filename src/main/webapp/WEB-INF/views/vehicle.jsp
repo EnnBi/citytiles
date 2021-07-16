@@ -15,11 +15,11 @@
 
 			<c:choose>
 				<c:when test="${edit}">
-					<c:set value="/vehicle/update" var="action" />
+					<c:set value="${pageContext.request.contextPath}/vehicle/update" var="action" />
 					<c:set var="caption" value="Update" />
 				</c:when>
 				<c:otherwise>
-					<c:set value="/vehicle/save" var="action" />
+					<c:set value="${pageContext.request.contextPath}/vehicle/save" var="action" />
 					<c:set var="caption" value="Save" />
 
 				</c:otherwise>
@@ -105,7 +105,7 @@
 				class="pagination rounded-flat pagination-success d-flex justify-content-center">
 				<c:if test="${currentPage !=1}">
 					<li class="page-item"><a class="page-link"
-						href="/vehicle/pageno=${currentPage - 1}"><i
+						href="${pageContext.request.contextPath}/vehicle/pageno=${currentPage - 1}"><i
 							class="mdi mdi-chevron-left"></i></a></li>
 				</c:if>
 				<c:forEach var="i" begin="1" end="${totalPages}">
@@ -121,7 +121,7 @@
 				</c:forEach>
 				<c:if test="${currentPage!= totalPages}">
 					<li class="page-item"><a class="page-link"
-						href="/vehicle/pageno=${currentPage + 1}"><i
+						href="${pageContext.request.contextPath}/vehicle/pageno=${currentPage + 1}"><i
 							class="mdi mdi-chevron-right"></i></a></li>
 				</c:if>
 			</ul>

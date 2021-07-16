@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.akash.entity.MaterialType;
 import com.akash.entity.Product;
-import com.akash.entity.Site;
 import com.akash.repository.ProductRepository;
 import com.akash.repository.SizeRepository;
 
@@ -122,8 +120,13 @@ public class ProductController {
 	public String delete(@PathVariable("id") long id,RedirectAttributes redirect,HttpSession session)
 	{
 		int page = (int) session.getAttribute("currentPage");
-		productRepository.deleteById(id);
-		redirect.addFlashAttribute("success", "Product Deleted Successfully");
+		try {
+			productRepository.deleteById(id);
+			redirect.addFlashAttribute("success", "Product Deleted Successfully");
+		} catch (Exception e) {
+			redirect.addFlashAttribute("fail", "Product cannot be deleted");
+		} 
+		
 		return "redirect:/product/pageno=" +page;
 	}
 	

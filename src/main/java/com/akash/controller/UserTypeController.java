@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.akash.entity.MaterialType;
 import com.akash.entity.UserType;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.UserTypeRepository;
@@ -119,8 +118,13 @@ public class UserTypeController {
 	public String delete(@PathVariable("id") long id,HttpSession session,RedirectAttributes redirect)
 	{
 		int page= (int) session.getAttribute("currentPage");
-		userRepository.deleteById(id);
-		redirect.addFlashAttribute("success","UserType Deleted Successfully");
+		try {
+			userRepository.deleteById(id);
+			redirect.addFlashAttribute("success","Person Type Deleted Successfully");
+		} catch (Exception e) {
+			redirect.addFlashAttribute("fail","Person Type cannot be deleted");
+		}
+		
 		return "redirect:/user-type/pageno=" +page;
 	}
 	@GetMapping("/pageno={page}")
@@ -133,7 +137,7 @@ public class UserTypeController {
 
 	@GetMapping("/{name}/users")
 	public ResponseEntity<?> usersOnUserType(@PathVariable String name){
-		return ResponseEntity.ok(appUserRepository.findByUserType_Name(name));
+		return ResponseEntity.ok(appUserRepository.findByUserType_NameAndActive(name,true));
 	}
 	
 	public void pagination(int page, Model model) {

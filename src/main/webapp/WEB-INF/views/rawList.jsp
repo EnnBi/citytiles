@@ -5,7 +5,7 @@
 <div class="col-lg-12 grid-margin">
 	<div class="card">
 		<div class="card-body">
-			<form:form action="/raw-material/search" method="post"
+			<form:form action="${pageContext.request.contextPath}/raw-material/search" method="post"
 				modelAttribute="rawMaterialSearch">
 
 				<div class="row">
@@ -41,7 +41,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Start Date</label>
 							<div class="col-sm-9">
-								<form:input type="date" class="form-control" path="startDate" />
+								<form:input type="text" class="form-control date" path="startDate" />
 
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">End Date</label>
 							<div class="col-sm-9">
-								<form:input type="date" class="form-control" path="endDate" />
+								<form:input type="text" class="form-control date" path="endDate" />
 
 							</div>
 						</div>
@@ -117,7 +117,7 @@
 				class="pagination rounded-flat pagination-success d-flex justify-content-center">
 				<c:if test="${currentPage !=1}">
 					<li class="page-item"><a class="page-link"
-						href="/raw-material/${currentPage - 1}"><i
+						href="${pageContext.request.contextPath}/raw-material/${currentPage - 1}"><i
 							class="mdi mdi-chevron-left"></i></a></li>
 				</c:if>
 				<c:forEach var="i" begin="1" end="${totalPages}">
@@ -133,7 +133,7 @@
 				</c:forEach>
 				<c:if test="${currentPage!= totalPages}">
 					<li class="page-item"><a class="page-link"
-						href="/raw-material/${currentPage + 1}"><i
+						href="${pageContext.request.contextPath}/raw-material/${currentPage + 1}"><i
 							class="mdi mdi-chevron-right"></i></a></li>
 				</c:if>
 			</ul>

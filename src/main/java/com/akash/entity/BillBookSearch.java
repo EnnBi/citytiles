@@ -12,10 +12,10 @@ public class BillBookSearch {
 	
 	Long customerId;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate startDate;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate endDate;
 	
 	Long siteId;

@@ -9,8 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -32,7 +32,9 @@ public class LabourInfo {
 	@Column(name="total_amount")
 	private Double totalAmount;
 	
-	@NotNull(message = "Please select labours")
+	@ManyToOne
+	Manufacture manufacture;
+	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	@JoinTable(name = "Labourinfo_Labours")
@@ -76,6 +78,14 @@ public class LabourInfo {
 
 	public void setLabours(List<AppUser> labours) {
 		this.labours = labours;
+	}
+	
+	public Manufacture getManufacture() {
+		return manufacture;
+	}
+
+	public void setManufacture(Manufacture manufacture) {
+		this.manufacture = manufacture;
 	}
 
 	@Override

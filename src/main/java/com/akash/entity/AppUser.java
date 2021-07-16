@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
 @Entity
 @Table(name="app_user")
 public class AppUser {
@@ -45,6 +46,9 @@ public class AppUser {
 	@NotNull(message ="select any userType")
 	UserType userType;
 	
+	@Column(name="Code")
+	String code;
+	
 	@NotNull(message ="Ledger Number is required")
 	@NotEmpty(message="Ledger Number is required")
 	@Column(name="ledger_number")
@@ -57,6 +61,13 @@ public class AppUser {
 	@JoinColumn(name="site")
 	List<Site> sites;
 	
+	
+	@ManyToOne
+	@JoinColumn(name="labour_group")
+	LabourGroup labourGroup;
+	
+	@Column(name="Active")
+	boolean active;
 	
 	public long getId() {
 		return id;
@@ -107,14 +118,32 @@ public class AppUser {
 		this.sites = sites;
 	}
 	
+	public LabourGroup getLabourGroup() {
+		return labourGroup;
+	}
+	public void setLabourGroup(LabourGroup labourGroup) {
+		this.labourGroup = labourGroup;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	public String getLabelName(){
 		return this.name+" "+this.address;
 	}
+	
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 	@Override
 	public String toString() {
-		return "AppUser [id=" + id + ", name=" + name + ", contact=" + contact + ", address=" + address + ", userType="
-				+ userType + ", ledgerNumber=" + ledgerNumber + ", accountNumber=" + accountNumber + ", sites=" + sites
-				+ "]";
+		return "AppUser [id=" + id + "]";
 	}
 	@Override
 	public int hashCode() {

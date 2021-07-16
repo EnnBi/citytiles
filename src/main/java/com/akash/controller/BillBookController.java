@@ -1,7 +1,15 @@
 package com.akash.controller;
 
+import java.awt.GraphicsEnvironment;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +21,29 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.akash.entity.AppUser;
 import com.akash.entity.BillBook;
 import com.akash.entity.BillBookSearch;
 import com.akash.entity.dto.BillBookDTO;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.BillBookRepository;
+import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.ProductRepository;
 import com.akash.repository.SiteRepository;
 import com.akash.repository.SizeRepository;
 import com.akash.repository.VehicleRepository;
 import com.akash.util.Constants;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 
 @Controller
@@ -32,7 +52,7 @@ public class BillBookController {
 
 	@Autowired
 	BillBookRepository billBookRepository;
-
+ 
 	@Autowired
 	AppUserRepository appUserRepository;
 
@@ -44,37 +64,51 @@ public class BillBookController {
 	SiteRepository siteRepository;
 	@Autowired
 	SizeRepository sizeRepository;
+	@Autowired
+	LabourGroupRepository labourGroupRepository;
 	
 	int from = 0;
 	int total = 0;
 	Long records = 0L;
 
 	@GetMapping
-	public String add(Model model) {
+	public String add(Model model,HttpServletResponse response) {
 		model.addAttribute("billBook", new BillBook());
 		String[] userTypes = { Constants.CUSTOMER, Constants.CONTRACTOR };
-		model.addAttribute("customers", appUserRepository.findAppUsersOnType(userTypes));
-		model.addAttribute("labours", appUserRepository.findByUserType_Name(Constants.LABOUR));
+		model.addAttribute("customers", appUserRepository.findAppUsersOnType(userTypes,true));
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("products", productRepository.findAll());
+		model.addAttribute("labourGroups", labourGroupRepository.findAll());
+		if(model.asMap().containsKey("print")){
+			BillBook billBook = (BillBook) model.asMap().get("billBookPrint");
+			printBillBook(billBook, response);
+		}
+		
 		return "billBook";
 	}
 
-	@PostMapping("/save")
-	public String save(@ModelAttribute("billBook") BillBook billBook, Model model) {
-
-		if (billBook.getLoaders().size() > 0) {
-			Double loadingAmtPerHead = billBook.getLoadingAmount() / billBook.getLoaders().size();
-			billBook.setLoadingAmountPerHead(loadingAmtPerHead);
-		}
-
-		if (billBook.getUnloaders().size() > 0) {
-			Double unloadingAmtPerHead = billBook.getUnloadingAmount() / billBook.getUnloaders().size();
-			billBook.setUnloadingAmountPerHead(unloadingAmtPerHead);
-		}
+	@RequestMapping(value="/save",params="save",method=RequestMethod.POST)
+	public String save(@ModelAttribute("billBook") BillBook billBook, Model model,RedirectAttributes redirectAttributes) {
+		if(billBook.getVehicle() != null)
+			billBook.setDriver(billBook.getVehicle().getDriver());
+		if(billBook.getLoadingAmount() !=null || billBook.getUnloadingAmount()!=null)
+			setLoadingAndUnloadingCharges(billBook);
 		billBookRepository.save(billBook);
-
+		redirectAttributes.addFlashAttribute("success","Bill Book saved successfully");
 		return "redirect:/bill-book";
+	}
+	
+	@RequestMapping(value="/save",params="print",method=RequestMethod.POST)
+	public String printAndSaveBillBook(@ModelAttribute("billBook") BillBook billBook, Model model,RedirectAttributes redirectAttributes,HttpServletResponse response){
+		if(billBook.getVehicle() != null)
+			billBook.setDriver(billBook.getVehicle().getDriver());
+		setLoadingAndUnloadingCharges(billBook);
+		billBookRepository.save(billBook);
+		redirectAttributes.addFlashAttribute("success","Bill Book saved successfully");
+		redirectAttributes.addFlashAttribute("print",true);
+		redirectAttributes.addFlashAttribute("billBookPrint",billBook);
+		return "redirect:/bill-book";
+
 	}
 
 	@GetMapping("/edit/{id}")
@@ -83,19 +117,23 @@ public class BillBookController {
 		BillBook billBook =  billBookRepository.findById(id).orElse(null);
 		model.addAttribute("billBook",billBook );
 		String[] userTypes = { Constants.CUSTOMER, Constants.CONTRACTOR };
-		model.addAttribute("customers", appUserRepository.findByUserType_NameIn(userTypes));
-		model.addAttribute("labours", appUserRepository.findByUserType_Name(Constants.LABOUR));
+		model.addAttribute("customers", appUserRepository.findByUserType_NameInAndActive(userTypes,true));
+		List<AppUser> labours = appUserRepository.findByUserType_NameAndActive(Constants.LABOUR,true);
+		labours.add(billBook.getDriver());
+		model.addAttribute("labours", labours);
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("products", productRepository.findAll());
 		model.addAttribute("sites", siteRepository.findAll());
 		model.addAttribute("sizes", sizeRepository.findAll());
+		model.addAttribute("labourGroups", labourGroupRepository.findAll());
 		return "billBookEdit";
 	}
 
-	@GetMapping("/delete")
-	public String delete(@PathVariable("id") long id) {
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable("id") long id,RedirectAttributes redirectAttributes) {
 		billBookRepository.deleteById(id);
-		return null;
+		redirectAttributes.addFlashAttribute("success","Bill Book deleted successfully");
+		return "redirect:/bill-book/search";
 	}
 
 	@GetMapping("/search")
@@ -123,6 +161,12 @@ public class BillBookController {
 	@GetMapping("/receipt/{number}")
 	public ResponseEntity<?> checkIfReceiptNoExists(@PathVariable String number) {
 		return ResponseEntity.ok(billBookRepository.existsByReceiptNumber(number));
+	}	
+	
+	@GetMapping("/print/{id}")
+	public void printBillBook(@PathVariable long id,HttpServletResponse response){
+		BillBook billBook = billBookRepository.findById(id).get();
+		printBillBook(billBook, response);
 	}
 	
 	public void pagination(int page, BillBookSearch billBookSearch, Model model) {
@@ -143,9 +187,73 @@ public class BillBookController {
 
 	private void fillModel(Model model) {
 		String[] userTypes = { Constants.CUSTOMER, Constants.CONTRACTOR };
-		model.addAttribute("customers", appUserRepository.findByUserType_NameIn(userTypes));
+		model.addAttribute("customers", appUserRepository.findByUserType_NameInAndActive(userTypes,true));
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("sites", siteRepository.findAll());
+		model.addAttribute("labourGroups", labourGroupRepository.findAll());
 		
+	}
+	
+	void setLoadingAndUnloadingCharges(BillBook billBook){
+		if (billBook.getLoaders().size() > 0) {
+			AppUser driver = null;
+			
+			if(billBook.getDriver() != null)
+				driver = billBook.getLoaders().stream().filter(l->l.getId() == billBook.getDriver().getId()).findFirst().orElse(null);
+			
+			if(driver == null){
+				Double loadingAmtPerHead = billBook.getLoadingAmount() / billBook.getLoaders().size();
+				billBook.setLoadingAmountPerHead(loadingAmtPerHead);
+			}
+			else{
+				Double driverLoadingCharge = billBook.getLoadingAmount()/2;
+				billBook.setDriverLoadingCharges(driverLoadingCharge);
+				Double loadingAmtPerHead = driverLoadingCharge / (billBook.getLoaders().size()-1);
+			    billBook.setLoadingAmountPerHead(loadingAmtPerHead);
+			}
+		}
+
+		if (billBook.getUnloaders().size() > 0) {
+			AppUser driver = null;
+			
+			if(billBook.getDriver() != null)
+				driver = billBook.getUnloaders().stream().filter(l->l.getId() == billBook.getDriver().getId()).findFirst().orElse(null);
+			
+			if(driver == null){
+				Double unloadingAmtPerHead = billBook.getUnloadingAmount() / billBook.getUnloaders().size();
+				billBook.setUnloadingAmountPerHead(unloadingAmtPerHead);
+			}
+			else{
+				Double driverUnloadingCharge = billBook.getUnloadingAmount()/3;
+				billBook.setDriverUnloadingCharges(driverUnloadingCharge);
+				Double labourUnloadingCharge = ((billBook.getUnloadingAmount()/3)*2)/(billBook.getLoaders().size()-1);
+				billBook.setUnloadingAmountPerHead(labourUnloadingCharge);
+			}
+			
+			
+		}
+	}
+	 
+	public void printBillBook(BillBook billBook,HttpServletResponse response){
+		InputStream mainJasperStream = this.getClass().getResourceAsStream("/BillBook.jasper");
+		InputStream subJasperStream = this.getClass().getResourceAsStream("/SalesDetail.jasper");
+		
+		try {
+			JasperReport mainReport =  (JasperReport) JRLoader.loadObject(mainJasperStream);
+			JasperReport salesReport =  (JasperReport) JRLoader.loadObject(subJasperStream);
+			
+			Map<String,Object> params =  new HashMap<>();
+			params.put("sales", salesReport);
+			JRDataSource data = new JRBeanCollectionDataSource(Arrays.asList(billBook));
+			JasperPrint jasperPrint  = JasperFillManager.fillReport(mainReport, params, data);
+			response.setContentType("application/pdf");
+			String fileName = billBook.getReceiptNumber()+"_"+LocalDate.now();
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
+			OutputStream  output = response.getOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, output);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

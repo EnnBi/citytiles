@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.akash.entity.Manufacture;
 import com.akash.entity.ManufactureSearch;
 import com.akash.entity.dto.ManufactureDTO;
 import com.akash.repository.AppUserRepository;
+import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.ManufactureRepository;
 import com.akash.repository.ProductRepository;
 import com.akash.repository.SizeRepository;
@@ -34,6 +36,8 @@ public class ManufactureController {
 	AppUserRepository appUserRepository;
 	@Autowired
 	SizeRepository sizeRepository;
+	@Autowired
+	LabourGroupRepository labourGroupRepository;
 	
 	int from = 0;
 	int total = 0;
@@ -42,17 +46,17 @@ public class ManufactureController {
 	@GetMapping
 	public String add(Model model)
 	{
+		fillModel(model);
 		model.addAttribute("manufacture", new Manufacture());
-		model.addAttribute("products", productRepository.findAll());
-		model.addAttribute("labours", appUserRepository.findByUserType_Name(Constants.LABOUR));
 		return "manufacture";
 	} 
 	
 	@PostMapping("/save")
-	public String save(@ModelAttribute("manufacture") Manufacture manufacture,Model model)
+	public String save(@ModelAttribute("manufacture") Manufacture manufacture,Model model,RedirectAttributes redirectAttributes)
 	{
-		
+	 manufacture.getLabourInfo().forEach(l->l.setManufacture(manufacture));
 	 manufactureRepository.save(manufacture);
+	 redirectAttributes.addFlashAttribute("success","Manufacture saved successfully");
 	 return "redirect:/manufacture";
 	}
 
@@ -61,15 +65,17 @@ public class ManufactureController {
 	{
 		Manufacture manufacture=manufactureRepository.findById(id).orElse(null);
 		model.addAttribute("manufacture",manufacture);
+		model.addAttribute("labours",appUserRepository.findByUserType_NameAndLabourGroup_IdAndActive(Constants.LABOUR,manufacture.getLabourGroup().getId(),true));
 		fillModel(model);
 		return "manufactureEdit";
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") long id)
+	public String delete(@PathVariable("id") long id,RedirectAttributes redirectAttributes)
 	{
 		manufactureRepository.deleteById(id);
-		return "manufactureSearch";
+		redirectAttributes.addFlashAttribute("success","Manufacture deleted successfully");
+		return "redirect:/manufacture/search";
 	}
 	@GetMapping("/search")
 	public String searchGet(Model model) {
@@ -109,10 +115,9 @@ public class ManufactureController {
 
 	}
 	private void fillModel(Model model) {
-		String[] userTypes = { Constants.LABOUR };
-		model.addAttribute("labours", appUserRepository.findByUserType_NameIn(userTypes));
 		model.addAttribute("products", productRepository.findAll());
 		model.addAttribute("sizes", sizeRepository.findAll());
+		model.addAttribute("labourGroups", labourGroupRepository.findAll());
 		
 	}
 }

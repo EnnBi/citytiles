@@ -11,24 +11,25 @@
 <title>Akash Enterprises</title>
 <!-- plugins:css -->
 <link rel="stylesheet"
-	href="/resources/vendors/mdi/css/materialdesignicons.min.css">
+	href="${pageContext.request.contextPath}/resources/vendors/mdi/css/materialdesignicons.min.css">
 <link rel="stylesheet"
-	href="/resources/vendors/simple-line-icons/css/simple-line-icons.css">
+	href="${pageContext.request.contextPath}/resources/vendors/simple-line-icons/css/simple-line-icons.css">
 <link rel="stylesheet"
-	href="/resources/vendors/flag-icon-css/css/flag-icon.min.css">
+	href="${pageContext.request.contextPath}/resources/vendors/flag-icon-css/css/flag-icon.min.css">
 <link rel="stylesheet"
-	href="/resources/vendors/css/vendor.bundle.base.css">
+	href="${pageContext.request.contextPath}/resources/vendors/css/vendor.bundle.base.css">
 <!-- endinject -->
 <!-- plugin css for this page -->
 <link rel="stylesheet"
-	hhref="/resources/endors/font-awesome/css/font-awesome.min.css" />
+	href="${pageContext.request.contextPath}/resources/endors/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet"
-	href="/resources/vendors/jquery-bar-rating/fontawesome-stars.css">
+	href="${pageContext.request.contextPath}/resources/vendors/jquery-bar-rating/fontawesome-stars.css">
 <!-- End plugin css for this page -->
 <!-- inject:css -->
-<link rel="stylesheet" href="/resources/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flatpickr.min.css">
 <!-- endinject -->
-<link rel="shortcut icon" href="/resources/images/favicon.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png" />
 </head>
 <body>
 	<div class="container-scroller">
@@ -167,7 +168,7 @@
 							<ul class="chat-list">
 								<li class="list active">
 									<div class="profile">
-										<img src="/resources/images/faces/face1.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face1.jpg" alt="image"><span
 											class="online"></span>
 									</div>
 									<div class="info">
@@ -177,7 +178,7 @@
 								</li>
 								<li class="list">
 									<div class="profile">
-										<img src="/resources/images/faces/face2.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face2.jpg" alt="image"><span
 											class="offline"></span>
 									</div>
 									<div class="info">
@@ -191,7 +192,7 @@
 								</li>
 								<li class="list">
 									<div class="profile">
-										<img src="/resources/images/faces/face3.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face3.jpg" alt="image"><span
 											class="online"></span>
 									</div>
 									<div class="info">
@@ -201,7 +202,7 @@
 								</li>
 								<li class="list">
 									<div class="profile">
-										<img src="/resources/images/faces/face4.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face4.jpg" alt="image"><span
 											class="offline"></span>
 									</div>
 									<div class="info">
@@ -211,7 +212,7 @@
 								</li>
 								<li class="list">
 									<div class="profile">
-										<img src="/resources/images/faces/face5.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face5.jpg" alt="image"><span
 											class="online"></span>
 									</div>
 									<div class="info">
@@ -221,7 +222,7 @@
 								</li>
 								<li class="list">
 									<div class="profile">
-										<img src="/resources/images/faces/face6.jpg" alt="image"><span
+										<img src="${pageContext.request.contextPath}/resources/images/faces/face6.jpg" alt="image"><span
 											class="online"></span>
 									</div>
 									<div class="info">
@@ -253,27 +254,35 @@
 	<!-- container-scroller -->
 
 	<!-- plugins:js -->
-	<script src="/resources/vendors/js/vendor.bundle.base.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendors/js/vendor.bundle.base.js"></script>
 	<!-- endinject -->
 	<!-- Plugin js for this page-->
 	<script
-		src="/resources/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
+		src="${pageContext.request.contextPath}/resources/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
 	
-	<script src="/resources/vendors/raphael/raphael.min.js"></script>
-	<script src="/resources/vendors/morris.js/morris.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendors/raphael/raphael.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendors/morris.js/morris.min.js"></script>
 	<script
-		src="/resources/vendors/jquery-sparkline/jquery.sparkline.min.js"></script>
+		src="${pageContext.request.contextPath}/resources/vendors/jquery-sparkline/jquery.sparkline.min.js"></script>
 	<!-- End plugin js for this page-->
 	<!-- inject:js -->
-	<script src="/resources/js/off-canvas.js"></script>
-	<script src="/resources/js/hoverable-collapse.js"></script>
-	<script src="/resources/js/misc.js"></script>
-	<script src="/resources/js/settings.js"></script>
-	<script src="/resources/js/todolist.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/off-canvas.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/hoverable-collapse.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/misc.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/settings.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/todolist.js"></script>
 	<!-- endinject -->
 	<!-- Custom js for this page-->
-	<script src="/resources/js/dashboard.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/flatpickr.min.js"></script>
+	
 	<!-- End custom js for this page-->
+	<script type="text/javascript">
+	$(".date").flatpickr({
+	    enableTime: false,
+	    dateFormat: "d-m-Y"
+	});
+	</script>
 </body>
 
 </html>

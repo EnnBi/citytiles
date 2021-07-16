@@ -6,7 +6,13 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Day Book</h4>
-			<form:form action="/day-book/search" method="post"
+			<c:if test="${not empty success}">
+				<div class="alert alert-success" role="alert">${success}</div>
+			</c:if>
+			<c:if test="${not empty fail}">
+				<div class="alert alert-danger" role="alert">${fail}</div>
+			</c:if>
+			<form:form action="${pageContext.request.contextPath}/day-book/search" method="post"
 				modelAttribute="dayBookSearch" id="form">
 
 				<div class="row">
@@ -82,7 +88,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label">Start Date</label>
 							<div class="col-sm-8">
-								<form:input type="date" class="form-control" required="required"
+								<form:input type="text" class="form-control date" required="required"
 									path="startDate" />
 							</div>
 						</div>
@@ -91,7 +97,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label">End Date</label>
 							<div class="col-sm-8">
-								<form:input type="date" class="form-control" required="required"
+								<form:input type="text" class="form-control date" required="required"
 									path="endDate" />
 							</div>
 						</div>
@@ -122,7 +128,7 @@
 								<div class="form-radio">
 									<label class="form-check-label"> <form:radiobutton
 											class="form-check-input" path="transactionType"
-											id="membershipRadios1" value="Revenue" /> Revenue <i
+											id="" value="Revenue" /> Revenue <i
 										class="input-helper"></i></label>
 								</div>
 							</div>
@@ -130,7 +136,7 @@
 								<div class="form-radio">
 									<label class="form-check-label"> <form:radiobutton
 											class="form-check-input" path="transactionType"
-											id="membershipRadios2" value="Expenditure" /> Expenditure <i
+											id="" value="Expenditure" /> Expenditure <i
 										class="input-helper"></i></label>
 								</div>
 							</div>
@@ -174,7 +180,7 @@
 <div class="col-lg-12 grid-margin">
 	<div class="card">
 		<div class="card-body">
-			<h4 class="card-title">Manufacture Table</h4>
+			<h4 class="card-title">DayBook Table</h4>
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead>
@@ -198,9 +204,9 @@
 								<td>${dayBook.amount}</td>
 								<td>${dayBook.responsiblePerson}</td>
 								<td>${dayBook.accountNumber}</td>
-								<td><a href="/day-book/edit/${dayBook.id}"
+								<td><a href="${pageContext.request.contextPath}/day-book/edit/${dayBook.id}"
 									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a
-									href="/day-book/delete/${dayBook.id}"
+									href="${pageContext.request.contextPath}/day-book/delete/${dayBook.id}"
 									class="btn btn-danger btn-fw">Delete</a></td>
 							</tr>
 						</c:forEach>
@@ -213,7 +219,7 @@
 				class="pagination rounded-flat pagination-success d-flex justify-content-center">
 				<c:if test="${currentPage !=1}">
 					<li class="page-item"><a class="page-link"
-						href="/day-book/pageno=${currentPage - 1}"><i
+						href="${pageContext.request.contextPath}/day-book/pageno=${currentPage - 1}"><i
 							class="mdi mdi-chevron-left"></i></a></li>
 				</c:if>
 				<c:forEach var="i" begin="1" end="${totalPages}">
@@ -229,7 +235,7 @@
 				</c:forEach>
 				<c:if test="${currentPage!= totalPages}">
 					<li class="page-item"><a class="page-link"
-						href="/day-book/pageno=${currentPage + 1}"><i
+						href="${pageContext.request.contextPath}/day-book/pageno=${currentPage + 1}"><i
 							class="mdi mdi-chevron-right"></i></a></li>
 				</c:if>
 			</ul>
@@ -237,15 +243,13 @@
 	</div>
 
 </div>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js"
-	integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A=="
-	crossorigin="anonymous"></script>
+
+<script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
 <script type="text/javascript">
 	$('#type').change(
 			function() {
 				var name = $(this).val();
-				var url = "/user-type/" + name + "/users";
+				var url = "${pageContext.request.contextPath}/user-type/" + name + "/users";
 				$.get(url, function(data) {
 					$('#users').find('option').not(':first').remove();
 					$.each(data, function(key, value) {

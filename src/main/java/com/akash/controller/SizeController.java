@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -116,8 +115,13 @@ public class SizeController {
 	public String delete(@PathVariable("id") long id,HttpSession session,RedirectAttributes redirect)
 	{
 		int page = (int) session.getAttribute("currentPage");
-		sizeRepository.deleteById(id);
-		redirect.addFlashAttribute("success", "Size Deleted Successfully");
+		try {
+			sizeRepository.deleteById(id);
+			redirect.addFlashAttribute("success", "Size Deleted Successfully");
+		} catch (Exception e) {
+			redirect.addFlashAttribute("fail", "Size cannot be deleted");
+		}
+		
 		return "redirect:/size/pageno=" +page;
 	}
 		

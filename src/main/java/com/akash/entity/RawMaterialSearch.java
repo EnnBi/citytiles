@@ -11,10 +11,10 @@ public class RawMaterialSearch {
 	
 	private Long appUserId;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate startDate;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate endDate;
 
 	public Long getMaterialTypeId() {

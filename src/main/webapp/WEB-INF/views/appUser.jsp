@@ -15,11 +15,11 @@
 
 			<c:choose>
 				<c:when test="${edit}">
-					<c:set value="/user/update" var="action" />
+					<c:set value="${pageContext.request.contextPath}/user/update" var="action" />
 					<c:set var="caption" value="Update" />
 				</c:when>
 				<c:otherwise>
-					<c:set value="/user/save" var="action" />
+					<c:set value="${pageContext.request.contextPath}/user/save" var="action" />
 					<c:set var="caption" value="Save" />
 
 				</c:otherwise>
@@ -94,6 +94,54 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Labour Group</label>
+							<div class="col-sm-9">
+								<form:select path="labourGroup" class=" form-control">
+								<form:option value="">Select Labour Group</form:option>
+								<form:options items="${labourGroups}" itemLabel="name"
+									itemValue="id" />
+							</form:select>
+								<form:errors path="labourGroup" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Code</label>
+							<div class="col-sm-9">
+								<form:input type="text" class="form-control"
+									path="code" />
+								<form:errors path="code" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+							<div class="col-md-12">
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label">Status</label>
+									<div class="col-sm-4">
+										<div class="form-radio">
+											<label class="form-check-label"> <form:radiobutton 
+												class="form-check-input transactionBy" path="active" required="required"
+												id="membershipRadios1" value="true"/> Active <i
+												class="input-helper"></i></label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-radio">
+											<label class="form-check-label"> <form:radiobutton
+												class="form-check-input transactionBy" path="active" required="required"
+												id="membershipRadios2" value="false"/> Inactive <i
+												class="input-helper"></i></label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				<%-- <div class="row">
 					<div class="col-md-12">
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Sites</label>
@@ -106,7 +154,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --%>
 				<div class="form-group row float-right">
 					<input type="submit" class="btn btn-success btn-fw"
 						 value="${caption}">

@@ -6,7 +6,13 @@
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Bill Book Search</h4>
-			<form:form action="/bill-book/search" class="form-sample"
+			<c:if test="${not empty success}">
+				<div class="alert alert-success" role="alert">${success}</div>
+			</c:if>
+			<c:if test="${not empty fail}">
+				<div class="alert alert-danger" role="alert">${fail}</div>
+			</c:if>
+			<form:form action="${pageContext.request.contextPath}/bill-book/search" class="form-sample"
 				modelAttribute="billBookSearch" method="post">
 				<div class="row">
 					<div class="col-md-6">
@@ -69,7 +75,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label">Start Date</label>
 							<div class="col-sm-8">
-								<form:input type="date" class="form-control" path="startDate"
+								<form:input type="text" class="form-control date" path="startDate"
 									required="required" />
 							</div>
 						</div>
@@ -78,7 +84,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label">End Date</label>
 							<div class="col-sm-8">
-								<form:input type="date" class="form-control" path="endDate"
+								<form:input type="text" class="form-control date" path="endDate"
 									required="required" />
 							</div>
 						</div>
@@ -119,9 +125,9 @@
 							<td>${billBook.site}</td>
 							<td>${billBook.vehicle}</td>
 							<td>${billBook.total}</td>
-							<td><a href="/bill-book/edit/${billBook.id}"
+							<td><a href="${pageContext.request.contextPath}/bill-book/edit/${billBook.id}"
 									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a
-									href="/bill-book/delete/${billBook.id}"
+									href="${pageContext.request.contextPath}/bill-book/delete/${billBook.id}"
 									class="btn btn-danger btn-fw">Delete</a></td>
 						</tr>
 					</c:forEach>	
@@ -134,7 +140,7 @@
 				class="pagination rounded-flat pagination-success d-flex justify-content-center">
 				<c:if test="${currentPage !=1}">
 					<li class="page-item"><a class="page-link"
-						href="/bill-book/pageno=${currentPage - 1}"><i
+						href="${pageContext.request.contextPath}/bill-book/pageno=${currentPage - 1}"><i
 							class="mdi mdi-chevron-left"></i></a></li>
 				</c:if>
 				<c:forEach var="i" begin="1" end="${totalPages}">
@@ -150,7 +156,7 @@
 				</c:forEach>
 				<c:if test="${currentPage!= totalPages}">
 					<li class="page-item"><a class="page-link"
-						href="/bill-book/pageno=${currentPage + 1}"><i
+						href="${pageContext.request.contextPath}/bill-book/pageno=${currentPage + 1}"><i
 							class="mdi mdi-chevron-right"></i></a></li>
 				</c:if>
 			</ul>

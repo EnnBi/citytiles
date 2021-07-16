@@ -7,7 +7,7 @@
 		<li class="nav-item nav-profile">
 			<div class="nav-link">
 				<div class="profile-image">
-					<img src="/resources/images/faces/profile.png" alt="image" /> 
+					<img src="${pageContext.request.contextPath}/resources/images/faces/profile.png" alt="image" /> 
 					<!--change class online to offline or busy as needed-->
 				</div>
 				<div class="profile-name">
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</li>
-		<li class="nav-item"><a class="nav-link" href="/dashboard"> <i
+		<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/dashboard"> <i
 				class="icon-rocket menu-icon"></i> <span class="menu-title">Dashboard</span>
 		</a></li>
 		<li class="nav-item"><a class="nav-link" data-toggle="collapse"
@@ -27,9 +27,9 @@
 			<div class="collapse" id="bill-book">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item d-none d-lg-block"><a class="nav-link"
-						href="/bill-book">Create</a></li>
+						href="${pageContext.request.contextPath}/bill-book">Create</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="/bill-book/search">Search</a></li>
+						href="${pageContext.request.contextPath}/bill-book/search">Search</a></li>
 				</ul>
 			</div></li>
 		<li class="nav-item d-none d-lg-block"><a class="nav-link"
@@ -41,9 +41,9 @@
 			<div class="collapse" id="manufacturing">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"><a class="nav-link"
-						href="/manufacture">Create</a></li>
+						href="${pageContext.request.contextPath}/manufacture">Create</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="/manufacture/search">Search</a></li>
+						href="${pageContext.request.contextPath}/manufacture/search">Search</a></li>
 				</ul>
 			</div></li>
 		<li class="nav-item"><a class="nav-link" data-toggle="collapse"
@@ -54,9 +54,9 @@
 			<div class="collapse" id="ui-basic">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"><a class="nav-link"
-						href="/day-book">Create</a></li>
+						href="${pageContext.request.contextPath}/day-book">Create</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="/day-book/search">Search</a></li>
+						href="${pageContext.request.contextPath}/day-book/search">Search</a></li>
 				</ul>
 			</div></li>
 		<li class="nav-item"><a class="nav-link" data-toggle="collapse"
@@ -67,9 +67,9 @@
 			<div class="collapse" id="ui-advanced">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"><a class="nav-link"
-						href="/user">Create</a></li>
+						href="${pageContext.request.contextPath}/user">Create</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="/user/search">Search</a></li>
+						href="${pageContext.request.contextPath}/user/search">Search</a></li>
 				</ul>
 			</div></li>
 		<li class="nav-item"><a class="nav-link" data-toggle="collapse"
@@ -81,24 +81,50 @@
 			<div class="collapse" id="form-elements">
 				<ul class="nav flex-column sub-menu">
 					<li class="nav-item"><a class="nav-link"
-						href="/raw-material">Create</a></li>
+						href="${pageContext.request.contextPath}/raw-material">Create</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="/raw-material/search">Search</a></li>
+						href="${pageContext.request.contextPath}/raw-material/search">Search</a></li>
+				</ul>
+			</div></li>
+			<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/inventory"> <i
+				class="icon-rocket menu-icon"></i> <span class="menu-title">Inventory</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/statement"> <i
+				class="icon-rocket menu-icon"></i> <span class="menu-title">Statement</span>
+		</a></li>
+			
+			<li class="nav-item"><a class="nav-link" data-toggle="collapse"
+			href="#settings" aria-expanded="false"
+			aria-controls="form-elements"> <i class="icon-flag menu-icon"></i>
+				<span class="menu-title">Settings</span> <span
+				class="badge badge-danger">7</span>
+		</a>
+			<div class="collapse" id="settings">
+				<ul class="nav flex-column sub-menu">
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/material-type">Raw Material Type</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/product">Product</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/size">Size</a></li>	
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/vehicle">Vehicle</a></li>	
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/user-type">Person Type</a></li>	
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/labour-group">Labour Group</a></li>	
+						<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/labour-cost">Labour Rate</a></li>	
 				</ul>
 			</div></li>
 		
-		<li class="nav-item"><a class="nav-link"
-			href="/material-type"> <i class="icon-cursor menu-icon"></i>
-				<span class="menu-title">Raw Material Type</span>
-		</a></li>
-		<li class="nav-item"><a class="nav-link"
-			href="/product"> <i
-				class="icon-calendar menu-icon"></i> <span class="menu-title">Product</span>
-		</a></li>
-		<li class="nav-item"><a class="nav-link"
+		 
+	
+		
+		<!-- <li class="nav-item"><a class="nav-link"
 			href="/site"> <i class="icon-clock menu-icon"></i>
 				<span class="menu-title">Site</span>
-		</a></li>
+		</a></li> 
 		<li class="nav-item"><a class="nav-link"
 			href="/size"> <i class="icon-picture menu-icon"></i>
 				<span class="menu-title">Size</span>
@@ -110,6 +136,6 @@
 		<li class="nav-item"><a class="nav-link"
 			href="/user-type"> <i class="icon-cursor menu-icon"></i>
 				<span class="menu-title">Person Type</span>
-		</a></li>
+		</a></li>-->
 	</ul>
 </nav>

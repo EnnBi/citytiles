@@ -44,12 +44,13 @@ public class DayBook {
 	private Double amount;
 	
 	@Column(name="date")
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate date;
 	
 	@Column(name="status")
 	private String status;
-
+	
+	
 	public long getId() {
 		return id;
 	}

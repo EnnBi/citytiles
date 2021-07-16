@@ -13,21 +13,23 @@ import com.akash.repository.custom.AppUserCustomizedRepository;
 
 public interface AppUserRepository extends CrudRepository<AppUser, Long>,AppUserCustomizedRepository {
 	
-	public boolean existsByContactOrAccountNumber(String contact,String accountNumber);
+	public boolean existsByContact(String contact);
 	
-	@Query("select a from AppUser a where(a.contact=:contact and a.accountNumber=:accNum) and a.id!=:id")
-	public AppUser chechUserExistsAlready(@Param("contact") String Contact,@Param("accNum") String accNum,@Param("id") long id);
+	@Query("select a from AppUser a where a.contact=:contact and a.id!=:id")
+	public AppUser chechUserExistsAlready(@Param("contact") String Contact,@Param("id") long id);
 	
-	public List<AppUser> findByUserType_Name(String userType);
+	public List<AppUser> findByUserType_NameAndActive(String userType,boolean active);
 	
-	@Query("Select a from AppUser a where a.userType.name in :userType")
-	public List<AppUser> findAppUsersOnType(@Param("userType") String[] userType);
+	@Query("Select a from AppUser a where a.userType.name in :userType and a.active = :active")
+	public List<AppUser> findAppUsersOnType(@Param("userType") String[] userType,@Param("active") boolean active);
 	
 	
-	public List<AppUserProjection> findByUserType_NameIn(String [] userTypes);
+	public List<AppUserProjection> findByUserType_NameInAndActive(String [] userTypes,boolean active);
 
 	@Query("Select u.sites from AppUser u where u.id= :id")
 	List<Site> findSitesOnUserId(@Param("id") long id);
+	
+	List<AppUser> findByUserType_NameAndLabourGroup_IdAndActive(String userType,long id,boolean active);
 	
 	
 }

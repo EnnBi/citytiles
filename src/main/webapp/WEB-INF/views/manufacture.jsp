@@ -1,11 +1,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+font-size: 1rem !important;
+}
+
+</style>
 <div class="col-12 grid-margin">
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Manufacturing</h4>
-			<form:form action="/manufacture/save" modelAttribute="manufacture"
+			<c:if test="${not empty success}">
+				<div class="alert alert-success" role="alert">${success}</div>
+			</c:if>
+			<c:if test="${not empty fail}">
+				<div class="alert alert-danger" role="alert">${fail}</div>
+			</c:if>
+			<form:form action="${pageContext.request.contextPath}/manufacture/save" modelAttribute="manufacture"
 				method="post">
 				<div class="row">
 					<div class="col-md-6">
@@ -25,7 +38,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Date</label>
 							<div class="col-sm-9">
-								<form:input type="date" class="form-control" path="date" required="required"/>
+								<form:input type="text" class="form-control date" path="date" required="required"/>
 							</div>
 						</div>
 					</div>
@@ -43,9 +56,14 @@
 					</div>
 					<div class="col-md-3">
 						<div class="form-group row">
-							<label class="col-sm-6 col-form-label">CPU</label>
+							<label class="col-sm-6 col-form-label">Labour Group</label>
 							<div class="col-sm-6">
-								<form:input class="form-control" placeholder="Cost Per Unit" path="cpu" id="cpu" required="required"/>
+								<form:hidden path="cpu" id="cpu"/>
+								<form:select path="labourGroup" class=" form-control" id="labourGroup" required="required">
+									<form:option value="">Select any Labour Group</form:option>
+									<form:options items="${labourGroups}" itemLabel="name"
+										itemValue="id" />
+								</form:select>
 							</div>
 						</div>
 					</div>
@@ -76,8 +94,8 @@
 					<div class="row">
 						<div class="col-md-4">
 							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">Quantity</label>
-								<div class="col-sm-9"> 
+								<label class="col-sm-4 col-form-label qtyLabel" >Quantity #1</label>
+								<div class="col-sm-8"> 
 									<form:input class="form-control quantity" placeholder="Quantity" path="labourInfo[0].quantity" required="required"/>
 								</div>
 							</div>
@@ -119,7 +137,9 @@
 							</div>
 						</div>
 					</div>
+					<hr style="border: 1px dotted #d0d0d0">
 				</div>
+				
 				<div class="row">
 
 					<div class="col-md-6">
@@ -151,29 +171,68 @@
 		</form:form>
 		</div>
 	</div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js" integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A==" crossorigin="anonymous"></script>
-
+	
+</div> 
+<select class="labSel" name="labourInfo[0].labours" multiple="multiple"  style="display:none">
+</select>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/select2.min.js" defer></script>
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function(){    
+	var idArr=[];
+	$('.labors').select2();
+	
+	
+	
 	$("#add").click(function(){
 		$(".labour-info:last").clone().insertAfter(".labour-info:last");
-		$(".labour-info:last").find(':input')
-		.val('');
+		$('.labors:last').parent().empty().append($('.labSel:last').clone());
+		$('.labSel:first').addClass('form-control labors').removeClass('labSel');
+		$('.labors:last').prop('required',true);
+		$('.labors:last').select2();
+		$('.labors:last').val(idArr).trigger('change');
+		$(".labour-info:last").find(':input').val('');
 		updateIndex()
 	});
 	
 	$(document).on('click','.delete',function(e){
 		if($('.labour-info').length>1)
 			$(this).parent().parent().parent().remove();
-		
 		updateIndex();
 		 updateAmountAndQuantity();
 	})
 	
+	$('#labourGroup').change(function(){
+		getRate();
+		var id = $(this).val();
+		var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
+		
+		$.get(url,function(data){
+			$('.labSel:last').find('option').remove();
+			$.each(data, function(key, value) {
+			$('.labSel:last').append($(
+			"<option></option>").attr(
+					"value", value.id).text(
+							value.code+" "+value.name));
+			});
+			
+			$('.labors').get().forEach(function(entry, index, array) {
+				$(entry).find('option').remove();
+				$.each(data, function(key, value) {
+					$(entry).append($(
+							"<option></option>").attr(
+							"value", value.id).text(
+							value.code+" "+value.name));
+					idArr.push(value.id);
+				});
+				$(entry).val(idArr).trigger('change');
+			});
+		});
+	});
+	
 	$('#product').change(function(){
 		var id = $(this).val();
-		var url = "/product/" + id + "/sizes";
+		var url = "${pageContext.request.contextPath}/product/" + id + "/sizes";
 		$.get(url,function(data){
 			$('#size').find('option').not(':first')
 			.remove();
@@ -210,6 +269,7 @@ $(document).ready(function(){
 	
 	function updateIndex() {
 		$('.labour-info').get().forEach(function(entry, index, array) {
+				$(entry).find('.qtyLabel').text('Quantity #'+(index+1))
 				$(entry).find('input, select').each(
 						function() {
 							var name = $(this).attr(
@@ -220,5 +280,26 @@ $(document).ready(function(){
 						});
 			});
 	}
+	$(document).on('change','#labourGroup,#product,#size',function(){
+		 getRate();
+		 /* console.log('going to set selected')
+		// $(".labors option").prop("selected", true);
+		 console.log($('.labors:last'));
+		 $('.labors:last').select2('destroy').find('option').prop('selected', 'selected').end().select2();
+		 //$('.labors:last').trigger('change');  */
+		 
+	});
+	function getRate(){
+		var lg = $('#labourGroup').val();
+		var product=$('#product').val();
+		var size=$('#size').val();
+		var url = "${pageContext.request.contextPath}/labour-cost/rate?product="+product+"&size="+size+"&labourGroup="+lg;
+		$.get(url,function(data){
+			$('#cpu').val(data);
+		});
+	}
+	
+	
 });
 </script>
+		

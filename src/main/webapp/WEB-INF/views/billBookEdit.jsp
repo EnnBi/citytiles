@@ -1,11 +1,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+font-size: 1rem !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+line-height: 10px
+}
+</style>
 <div class="col-12 grid-margin">
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Bill Book</h4>
-			<form:form action="/bill-book/save" class="form-sample"
+			<form:form action="${pageContext.request.contextPath}/bill-book/save" class="form-sample"
 				modelAttribute="billBook" method="post">
 				<div class="row">
 					<div class="col-md-6">
@@ -22,7 +31,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label">Date</label>
 							<div class="col-sm-8">
-								<form:input type="date" class="form-control" path="date"
+								<form:input type="text" class="form-control date" path="date"
 									required="required" />
 							</div>
 						</div>
@@ -45,10 +54,9 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group row">
-							<label class="col-sm-4 col-form-label">Phone No.</label>
+							<label class="col-sm-4 col-form-label">Other Vehicle</label>
 							<div class="col-sm-8">
-								<input class="form-control" type="text" id="contact" value="${billBook.customer.contact}"
-									readonly="true" />
+								<form:input class="form-control" type="text" path="otherVehicle" />
 							</div>
 						</div>
 					</div>
@@ -61,8 +69,40 @@
 								<form:select class="form-control" path="customer" id="customer"
 									required="required">
 									<form:option value="">Select Customer</form:option>
-									<form:options items="${customers}" itemLabel="name" itemValue="id"/>
+									<c:forEach var="customer" items="${customers}">
+									 <c:if test="${billBook.customer.id eq customer.id}">
+									 	<form:option value="${customer.id}" selected="selected"
+											contact="${customer.contact}" address="${customer.address}">
+											<c:out value="${customer.name} ${customer.address}" />
+										</form:option>
+									 </c:if>
+									 <c:if test="${billBook.customer.id ne customer.id}">
+										 <form:option value="${customer.id}"
+												contact="${customer.contact}" address="${customer.address}">
+												<c:out value="${customer.name} ${customer.address}" />
+											</form:option>
+									 </c:if>
+									</c:forEach>
 								</form:select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Site</label>
+							<div class="col-sm-8">
+								<form:input type="text" class="form-control" path="sites" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Phone No.</label>
+							<div class="col-sm-8">
+								<input class="form-control" type="text" id="contact"
+									readonly="true" value="${billBook.customer.contact}"/>
 							</div>
 						</div>
 					</div>
@@ -77,16 +117,16 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group row">
-							<label class="col-sm-2 col-form-label">Sites</label>
-							<div class="col-sm-10">
-								<form:select class="form-control" path="site" id="site">
-									<option value="">Select any Site</option>
-									<form:options items="${sites}" itemLabel="name" itemValue="id"/>
-								</form:select>
+					<div class="col-md-6">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label">Labour Group</label>
+								<div class="col-sm-8">
+									<form:select  class="form-control" id="labourGroup" path="labourGroup" required="required">
+										<form:option value="">Select any Labour Group</form:option>
+										<form:options items="${labourGroups}" itemLabel="name" itemValue="id"/>
+									</form:select>
+								</div>
 							</div>
-						</div>
 					</div>
 				</div>
 				<hr>
@@ -266,7 +306,11 @@
 						</div>
 						<div class="form-group row float-right">
 							<input type="submit" class="btn btn-success btn-fw"
-								value="Submit">
+								value="Submit" name="save">
+						</div>
+						<div class="form-group row float-right">
+							<a class="btn btn-primary btn-fw" style="margin-right: 2rem;"
+								href="${pageContext.request.contextPath}/bill-book/print/${id}">Print</a>
 						</div>
 					</div>
 				</div>
@@ -275,12 +319,13 @@
 		</div>
 	</div>
 </div>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js"
-	integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A=="
-	crossorigin="anonymous"></script>
-
-<script type="text/javascript">
+<script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/select2.min.js"></script>
+<script>
+var idArr=[];
+$('#customer').select2();
+$('#loaders').select2();
+$('#unloaders').select2();
 	$(document)
 			.ready(
 					function() {
@@ -305,6 +350,7 @@
 										$(this).parent().parent().parent()
 												.parent().remove();
 										updateIndex();
+										updateTotal();
 									}
 
 								});
@@ -318,7 +364,7 @@
 									var sizeElmnt = productElement.parent()
 											.parent().parent().find('.size');
 									var id = productElement.val();
-									var url = "/product/" + id + "/sizes";
+									var url = "${pageContext.request.contextPath}/product/" + id + "/sizes";
 									console.log(url);
 									$.get(url, function(data) {
 										console.table(data);
@@ -345,7 +391,7 @@
 									$('#address').val(address);
 									$('#contact').val(contact);
 
-									var url = "/user/" + id + "/sites";
+									var url = "${pageContext.request.contextPath}/user/" + id + "/sites";
 									$.get(url, function(data) {
 										console.table(data);
 										$('#site').find('option').not(':first')
@@ -465,7 +511,7 @@
 
 						$('#receipt').change(function() {
 							var number = $(this).val();
-							var url = "/bill-book/receipt/" + number;
+							var url = "${pageContext.request.contextPath}/bill-book/receipt/" + number;
 							$.get(url, function(data) {
 								if (data) {
 									alert('Receipt Number already exists');
@@ -473,6 +519,53 @@
 								}
 							});
 						});
+						
+						$('#vehicle').change(function(){
+							var id = $(this).val();
+							var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
+							$.get(url,function(data){
+								if(data){
+									$('#loaders').empty().trigger("change");
+									$('#unloaders').empty().trigger("change");
+									var newOption = new Option(data.code+" "+data.name, data.id, true, true);
+									$('#unloaders').append(newOption).trigger('change');
+									var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+									$('#loaders').append(newOption2).trigger('change');
+								}
+							});
+						});
+						
+						$('#labourGroup').change(function(){
+							var id = $(this).val();
+							var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
+							$.get(url,function(data){
+								debugger;
+								$('#loaders').empty().trigger("change");
+								$('#unloaders').empty().trigger("change");
+								$.each(data, function(key, value) {
+									$('#loaders').append(
+											$("<option></option>").attr(
+												"value", value.id).text(
+													value.code+" "+value.name));
+									
+									$('#unloaders').append(
+											$("<option></option>").attr(
+												"value", value.id).text(
+													value.code+" "+value.name));
+									idArr.push(value.id);
+								});
+								var id =  $("#vehicle").val();
+								var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
+								$.get(url,function(data){
+									var newOption = new Option(data.code+" "+data.name, data.id, true, true);
+									$('#loaders').append(newOption).trigger('change');
+									var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+									$('#unloaders').append(newOption2).trigger('change');
+								});
+								$('#loaders').val(idArr).trigger('change');
+								$('#unloaders').val(idArr).trigger('change');
+							});
+					});
 
 					});
 </script>

@@ -154,7 +154,7 @@ public class RawMaterialController {
 	}
 
 	private void fillModel(Model model) {
-		model.addAttribute("userList", userRepository.findByUserType_Name(Constants.DEALER));
+		model.addAttribute("userList", userRepository.findByUserType_NameAndActive(Constants.DEALER,true));
 		model.addAttribute("rawList", materialRepository.findAll());
 	}
 

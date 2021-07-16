@@ -2,6 +2,7 @@ package com.akash.repository.custom;
 
 import java.util.List;
 
+import com.akash.entity.BillBook;
 import com.akash.entity.BillBookSearch;
 import com.akash.entity.dto.BillBookDTO;
 

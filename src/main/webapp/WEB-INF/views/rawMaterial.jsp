@@ -15,11 +15,11 @@
 
 			<c:choose>
 				<c:when test="${edit}">
-					<c:set value="/raw-material/update" var="action" />
+					<c:set value="${pageContext.request.contextPath}/raw-material/update" var="action" />
 					<c:set var="caption" value="Update" />
 				</c:when>
 				<c:otherwise>
-					<c:set value="/raw-material/save" var="action" />
+					<c:set value="${pageContext.request.contextPath}/raw-material/save" var="action" />
 					<c:set var="caption" value="Save" />
 
 				</c:otherwise>

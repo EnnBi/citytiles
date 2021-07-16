@@ -29,10 +29,15 @@ public class Sales {
 	private Double quantity;
 	
 	@Column(name="unit_price")
-	private Long unitPrice;
+	private Double unitPrice;
 	
 	@Column(name="amount")
 	private Double amount;
+	
+	@ManyToOne
+	@JoinColumn(name="bill_book")
+	BillBook billBook;
+	
 
 	public long getId() {
 		return id;
@@ -42,7 +47,7 @@ public class Sales {
 		this.id = id;
 	}
 
-	public Product getProduct() {
+	public Product getProduct() { 
 		return product;
 	}
 
@@ -66,11 +71,11 @@ public class Sales {
 		this.quantity = quantity;
 	}
 
-	public Long getUnitPrice() {
+	public Double getUnitPrice() {
 		return unitPrice;
 	}
 
-	public void setUnitPrice(Long unitPrice) {
+	public void setUnitPrice(Double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
 
@@ -80,6 +85,14 @@ public class Sales {
 
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+
+	public BillBook getBillBook() {
+		return billBook;
+	}
+
+	public void setBillBook(BillBook billBook) {
+		this.billBook = billBook;
 	}
 
 	@Override

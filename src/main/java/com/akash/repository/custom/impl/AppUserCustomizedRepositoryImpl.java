@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import com.akash.entity.AppUser;
 import com.akash.entity.AppUserSearch;
 import com.akash.repository.custom.AppUserCustomizedRepository;
+import com.akash.util.Constants;
 
 public class AppUserCustomizedRepositoryImpl implements AppUserCustomizedRepository{
 	
@@ -34,7 +35,7 @@ public class AppUserCustomizedRepositoryImpl implements AppUserCustomizedReposit
 
 		Query query=em.createQuery(cq);
 		
-		return query.setFirstResult(from).setMaxResults(10).getResultList();
+		return query.setFirstResult(from).setMaxResults(Constants.ROWS).getResultList();
 
 }
 	public List<Predicate> getPredicates(Root<AppUser> root,CriteriaBuilder cb,AppUserSearch appUserSearch){
@@ -55,8 +56,8 @@ public class AppUserCustomizedRepositoryImpl implements AppUserCustomizedReposit
 		if(isNotNull(appUserSearch.getUserTypeId()))
 			predicates.add(cb.equal(root.get("userType").get("id"),appUserSearch.getUserTypeId()));
 		
-		
-		
+		if(isNotNull(appUserSearch.getLabourGroupId()))
+			predicates.add(cb.equal(root.get("labourGroup").get("id"),appUserSearch.getLabourGroupId()));
 		return predicates;
 	}
 	

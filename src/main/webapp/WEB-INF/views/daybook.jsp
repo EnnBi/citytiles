@@ -3,26 +3,32 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <div class="col-md-12 grid-margin stretch-card">
-	<c:if test="${dayBook.transactionType eq 'Expenditure' or empty dayBook.transactionType}">
+	<c:if test="${dayBook.transactionType eq 'Expenditure'}">
 		<c:set var="exp" value="active"/>
 	</c:if>
-	<c:if test="${dayBook.transactionType eq 'Revenue'}">
+	<c:if test="${dayBook.transactionType eq 'Revenue' or empty dayBook.transactionType}">
 		<c:set var="rev" value="active"/>
 	</c:if>
 	<div class="card">
 		<div class="card-body">
 			<h4 class="card-title">Day Book</h4>
+			<c:if test="${not empty success}">
+				<div class="alert alert-success" role="alert">${success}</div>
+			</c:if>
+			<c:if test="${not empty fail}">
+				<div class="alert alert-danger" role="alert">${fail}</div>
+			</c:if>
 			<ul class="nav nav-tabs tab-solid  tab-solid-primary" role="tablist">
+				<li class="nav-item" style="width: 50%"><a class="nav-link  ${rev}"
+					id="rev-tab" data-toggle="tab" href="#revenue" role="tab"
+					aria-controls="profile" aria-selected="true">Revenue</a></li>
 				<li class="nav-item" style="width: 50%"><a
 					class="nav-link ${exp}"id="exp-tab" data-toggle="tab"
 					href="#expenditure" role="tab" aria-controls="home"
-					aria-selected="true">Expenditure</a></li>
-				<li class="nav-item" style="width: 50%"><a class="nav-link ${rev}"
-					id="rev-tab" data-toggle="tab" href="#revenue" role="tab"
-					aria-controls="profile" aria-selected="false">Revenue</a></li>
+					aria-selected="false">Expenditure</a></li>
 			</ul>
 			<div class="tab-content tab-content-basic">
-				<form:form action="/day-book/save" method="post"
+				<form:form action="${pageContext.request.contextPath}/day-book/save" method="post"
 					modelAttribute="dayBook" id="form">
 					<div class="tab-pane fade active show" role="tabpanel"
 						aria-labelledby="home-tab">
@@ -90,7 +96,7 @@
 								<div class="form-group row">
 									<label class="col-sm-4 col-form-label">Date</label>
 									<div class="col-sm-8">
-										<form:input type="date" class="form-control" required="required"
+										<form:input type="text" class="form-control date" required="required"
 											path="date"  />
 									</div>
 								</div>
@@ -181,10 +187,7 @@
 		</div>
 	</div>
 </div>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js"
-	integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A=="
-	crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		
@@ -231,7 +234,7 @@
 	$('#type').change(
 			function() {
 				var name = $(this).val();
-				var url = "/user-type/" + name + "/users";
+				var url = "${pageContext.request.contextPath}/user-type/" + name + "/users";
 				$.get(url, function(data) {
 					$('#users').find('option').not(':first').remove();
 					$.each(data, function(key, value) {

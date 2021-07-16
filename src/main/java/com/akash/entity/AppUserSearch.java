@@ -12,6 +12,8 @@ public class AppUserSearch {
 	private String ledgerNumber;
 	
 	private Long userTypeId;
+	
+	private Long labourGroupId;
 
 	public String getName() {
 		return name;
@@ -52,6 +54,15 @@ public class AppUserSearch {
 	public void setUserTypeId(Long userTypeId) {
 		this.userTypeId = userTypeId;
 	}
+
+	public Long getLabourGroupId() {
+		return labourGroupId;
+	}
+
+	public void setLabourGroupId(Long labourGroupId) {
+		this.labourGroupId = labourGroupId;
+	}
+	
 	
 	
 

@@ -15,11 +15,11 @@
 
 			<c:choose>
 				<c:when test="${edit}">
-					<c:set value="/user-type/update" var="action" />
+					<c:set value="${pageContext.request.contextPath}/user-type/update" var="action" />
 					<c:set var="caption" value="Update" />
 				</c:when>
 				<c:otherwise>
-					<c:set value="/user-type/save" var="action" />
+					<c:set value="${pageContext.request.contextPath}/user-type/save" var="action" />
 					<c:set var="caption" value="Save" />
 
 				</c:otherwise>
@@ -69,9 +69,9 @@
 							<tr>
 								<td>${templist.name}</td>
 								<td><a href="${updatelink}/${templist.id}"
-									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a
+									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><%-- <a
 									href="${deletelink}/${templist.id}"
-									class="btn btn-danger btn-fw"> Delete</a></td>
+									class="btn btn-danger btn-fw"> Delete</a> --%></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -86,7 +86,7 @@
 				class="pagination rounded-flat pagination-success d-flex justify-content-center mt-10">
 				<c:if test="${currentPage !=1}">
 					<li class="page-item"><a class="page-link"
-						href="/user-type/pageno=${currentPage - 1}"><i
+						href="${pageContext.request.contextPath}/user-type/pageno=${currentPage - 1}"><i
 							class="mdi mdi-chevron-left"></i></a></li>
 				</c:if>
 				<c:forEach var="i" begin="1" end="${totalPages}">
@@ -102,7 +102,7 @@
 				</c:forEach>
 				<c:if test="${currentPage!= totalPages}">
 					<li class="page-item"><a class="page-link"
-						href="/user-type/pageno=${currentPage + 1}"><i
+						href="${pageContext.request.contextPath}/user-type/pageno=${currentPage + 1}"><i
 							class="mdi mdi-chevron-right"></i></a></li>
 				</c:if>
 			</ul>

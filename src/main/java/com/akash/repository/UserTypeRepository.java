@@ -13,4 +13,6 @@ public interface UserTypeRepository extends CrudRepository<UserType, Long>,Pagin
 	
 	@Query("select u from UserType u where u.name=:name and u.id!=:id")
 	public UserType chechUserAlreadyExists(@Param("name") String name,@Param("id") long id);
+	
+	UserType findByName(String name);
 }
