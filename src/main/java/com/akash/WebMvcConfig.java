@@ -16,7 +16,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		System.err.println("Registering interceptor");
 		registry.addInterceptor(new MyInterceptor());
 	}
 }
@@ -25,7 +24,7 @@ class MyInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if (LocalDate.now().isAfter(LocalDate.of(2021, 8, 01)))
+		if (LocalDate.now().isAfter(LocalDate.of(2021,11, 01)))
 			if (!(request.getRequestURI().contains("/dashboard") || request.getRequestURI().contains("/resources"))) {
 				response.sendRedirect("/dashboard");
 				return false;

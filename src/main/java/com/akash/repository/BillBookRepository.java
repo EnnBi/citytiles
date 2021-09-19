@@ -43,7 +43,7 @@ public interface BillBookRepository extends CrudRepository<BillBook,Long>,BillBo
 
 	@Query("Select Sum(b.total) from BillBook b where b.customer.id = :id and b.date between :startDate and :endDate")
 	Double sumOfCustomerDebits(@Param("id") long id,@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
-	
+	 
 	@Query("Select new com.akash.entity.CustomerStatement(b.id,b.receiptNumber,b.date,b.vehicle,b.otherVehicle,b.customer.address,b.sites,b.loadingAmount,b.unloadingAmount,b.carraige,b.total) from BillBook b where b.customer.id = :id and (b.date between :startDate and :endDate)")
 	List<CustomerStatement> findCustomerBillBookDebits(@Param("id") long id,@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
 	 
@@ -53,5 +53,6 @@ public interface BillBookRepository extends CrudRepository<BillBook,Long>,BillBo
 	@Query("Select Sum(s.quantity) from Sales s where s.product.id = :product and s.size.id = :size and (s.billBook.date between :startDate and :endDate)")
 	Double findSumOfSold(@Param("product") long product,@Param("size") long size,@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
 	
+	List<BillBook> findByCustomer_IdAndDateBetween(long id,LocalDate startDate,LocalDate endDate);
 } 
   

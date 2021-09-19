@@ -30,7 +30,8 @@ public class BillBookCustomizedRepositoryImpl implements BillBookCustomizedRepos
 		List<Predicate> predicates = getPredicates(cb, root, billBookSearch);
 		cq.select(cb.construct(BillBookDTO.class, root.get("id"), root.get("receiptNumber"),
 				root.get("customer").get("name"), root.get("customer").get("address"), root.get("date"),
-				root.get("vehicle").get("number"), root.get("sites"), root.get("total")))
+				//root.get("vehicle"), 
+				root.get("sites"), root.get("total")))
 				.where(predicates.toArray(new Predicate[] {}));
 		
 		cq.orderBy(cb.desc(root.get("date")));

@@ -2,6 +2,15 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+	.select2-container--default .select2-selection--multiple .select2-selection__choice{
+	font-size: 1rem !important;
+	}
+	.select2-container--default .select2-selection--single .select2-selection__rendered{
+	line-height: 10px
+	}
+	</style>
 <div class="col-12 grid-margin">
 	<div class="card">
 		<div class="card-body">
@@ -110,7 +119,7 @@
 							<th>Date</th>
 							<th>Customer Name</th>
 							<th>Site</th>
-							<th>Vehicle</th>
+							<!-- <th>Vehicle</th> -->
 							<th>Total</th>
 							<th>Action</th>
 						</tr>
@@ -123,7 +132,7 @@
 							<td>${billBook.date}</td>
 							<td>${billBook.customerName}</td>
 							<td>${billBook.site}</td>
-							<td>${billBook.vehicle}</td>
+							<!-- <td>${billBook.vehicle}</td> -->
 							<td>${billBook.total}</td>
 							<td><a href="${pageContext.request.contextPath}/bill-book/edit/${billBook.id}"
 									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a
@@ -164,3 +173,10 @@
 	</div>
 
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/select2.min.js" defer></script>
+<script>
+$(document).ready(function(){
+	$('#customer').select2();
+});
+</script>

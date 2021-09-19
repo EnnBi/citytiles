@@ -50,7 +50,7 @@ public class Manufacture {
 	List<LabourInfo> labourInfo;
 
 	@Column(name = "cement")
-	private Integer cement;
+	private Double cement;
 
 	@ManyToOne
 	@JoinColumn(name="Labour_Group")
@@ -112,11 +112,11 @@ public class Manufacture {
 		this.labourInfo = labourInfo;
 	}
 
-	public Integer getCement() {
+	public Double getCement() {
 		return cement;
 	}
 
-	public void setCement(Integer cement) {
+	public void setCement(Double cement) {
 		this.cement = cement;
 	}
 

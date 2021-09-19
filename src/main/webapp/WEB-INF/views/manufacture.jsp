@@ -199,7 +199,7 @@ $(document).ready(function(){
 		if($('.labour-info').length>1)
 			$(this).parent().parent().parent().remove();
 		updateIndex();
-		 updateAmountAndQuantity();
+		 updateAmountAndQuantity(); 
 	})
 	
 	$('#labourGroup').change(function(){
@@ -246,10 +246,11 @@ $(document).ready(function(){
 	})
 	
 	$(document).on('change','#cpu ,.quantity,.labors',function(){
+		debugger;
 		 updateAmountAndQuantity();
 	});
 	
-	function updateAmountAndQuantity(){
+	function   updateAmountAndQuantity(){
 		var cpu = Number($('#cpu').val());
 		var totalQuantity=0,totalAmount=0;
 		$('.quantity').get().forEach(function(entry, index, array) {
@@ -299,7 +300,11 @@ $(document).ready(function(){
 		});
 	}
 	
-	
+	$(".date").flatpickr({
+		enableTime: false,
+	    dateFormat: "d-m-Y",
+		defaultDate: new Date()
+	});
 });
 </script>
 		

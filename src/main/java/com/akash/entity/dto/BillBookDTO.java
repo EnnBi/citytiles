@@ -2,6 +2,8 @@ package com.akash.entity.dto;
 
 import java.time.LocalDate;
 
+import com.akash.entity.Vehicle;
+
 public class BillBookDTO {
 
 	long id;
@@ -18,14 +20,16 @@ public class BillBookDTO {
 	
 	Double total;
 
-	public BillBookDTO(long id, String receiptNumber, String customerName,String address, LocalDate date, String vehicle, String site,
+	public BillBookDTO(long id, String receiptNumber, String customerName,String address, LocalDate date, 
+			//Vehicle vehicle,
+				String site,
 			Double total) {
 		super();
 		this.id = id;
 		this.receiptNumber = receiptNumber;
 		this.customerName = customerName+"-"+address;
 		this.date = date;
-		this.vehicle = vehicle;
+		//this.vehicle = vehicle != null?vehicle.getNumber():null;
 		this.site = site;
 		this.total = total;
 	}
@@ -34,7 +38,7 @@ public class BillBookDTO {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(long id) {   
 		this.id = id;
 	}
 

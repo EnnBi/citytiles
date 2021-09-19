@@ -30,6 +30,7 @@ public class BillBook {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id")
 	private long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	AppUser customer;
@@ -61,6 +62,9 @@ public class BillBook {
 	@Column(name = "total")
 	private Double total;
 
+	@Column(name="Discount")
+	private Double discount;
+	
 	@Column(name = "paid")
 	private Double paid;
 
@@ -110,6 +114,9 @@ public class BillBook {
 
 	@ManyToOne
 	LabourGroup labourGroup;
+	
+	@ManyToOne
+	LabourGroup unloaderLabourGroup;
 	
 	@Transient
 	DecimalFormat df = new DecimalFormat("#.##"); 
@@ -304,6 +311,22 @@ public class BillBook {
 
 	public void setDriver(AppUser driver) {
 		this.driver = driver;
+	}
+		
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+	
+	public LabourGroup getUnloaderLabourGroup() {
+		return unloaderLabourGroup;
+	}
+
+	public void setUnloaderLabourGroup(LabourGroup unloaderLabourGroup) {
+		this.unloaderLabourGroup = unloaderLabourGroup;
 	}
 
 	@Override

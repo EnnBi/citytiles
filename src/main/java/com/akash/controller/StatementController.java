@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.akash.entity.AppUser;
+import com.akash.entity.BillBook;
 import com.akash.entity.CustomerStatement;
 import com.akash.entity.DealerStatement;
 import com.akash.entity.DriverStatement;
@@ -32,10 +33,10 @@ import com.akash.repository.DayBookRepository;
 import com.akash.repository.ManufactureRepository;
 import com.akash.repository.RawMaterialRepository;
 import com.akash.repository.UserTypeRepository;
+import com.akash.util.BillBookToCustomerStatement;
 import com.akash.util.Constants;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -363,7 +364,9 @@ public class StatementController {
 		Double balance = Double.valueOf(df.format(prevBalance));;
 		this.prevBalance=prevBalance;
 		
-		List<CustomerStatement> billBookCreditEntries = billBookRepo.findCustomerBillBookDebits(search.getUser(),search.getStartDate(),search.getEndDate());
+		
+		List<BillBook> customerBillBook = billBookRepo.findByCustomer_IdAndDateBetween(search.getUser(),search.getStartDate(),search.getEndDate());
+		List<CustomerStatement> billBookCreditEntries = BillBookToCustomerStatement.convert(customerBillBook);
 		billBookCreditEntries.forEach(b->{
 			b.setSales(billBookRepo.findSalesOnBillBookId(b.getId()));
 		});

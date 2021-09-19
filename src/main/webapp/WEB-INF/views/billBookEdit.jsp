@@ -121,12 +121,23 @@ line-height: 10px
 							<div class="form-group row">
 								<label class="col-sm-4 col-form-label">Labour Group</label>
 								<div class="col-sm-8">
-									<form:select  class="form-control" id="labourGroup" path="labourGroup" required="required">
+									<form:select  class="form-control" id="labourGroup" path="labourGroup" >
 										<form:option value="">Select any Labour Group</form:option>
 										<form:options items="${labourGroups}" itemLabel="name" itemValue="id"/>
 									</form:select>
 								</div>
 							</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Unloader Labour Group</label>
+							<div class="col-sm-8">
+								<form:select  class="form-control" id="unloaderGroup" path="unloaderLabourGroup" >
+										<form:option value="">Select any Labour Group</form:option>
+										<form:options items="${labourGroups}" itemLabel="name" itemValue="id"/>
+									</form:select>
+							</div>
+						</div>
 					</div>
 				</div>
 				<hr>
@@ -286,7 +297,20 @@ line-height: 10px
 									</div>
 									<div class="col-sm-4">
 										<form:input type="text" class="form-control" path="paid"
-											id="paid" pattern="^[0-9]\d{0,9}(\.\d{1,3})?%?$" required="required" />
+											id="paid" pattern="^[0-9]\d{0,9}(\.\d{1,3})?%?$"  />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 ">
+								<div class="form-group row">
+									<div class="col-sm-6 col-form-label">
+										<label class="float-right">Discount:</label>
+									</div>
+									<div class="col-sm-4">
+										<form:input type="text" class="form-control" path="discount"
+											id="discount" pattern="^[0-9]\d{0,9}(\.\d{1,3})?%?$" />
 									</div>
 								</div>
 							</div>
@@ -482,6 +506,10 @@ $('#unloaders').select2();
 							updatePaid();
 						});
 
+						$('#discount').change(function() {
+							updatePaid();
+						});
+
 						function updateTotal() {
 							var amount = 0;
 							$('.sales-row').find('.amount').each(function() {
@@ -506,7 +534,8 @@ $('#unloaders').select2();
 						function updatePaid() {
 							var total = Number($('#total').val());
 							var paid = Number($('#paid').val());
-							$('#balance').val(total - paid);
+							var discount = Number($('#discount').val());
+							$('#balance').val(total -discount-paid);
 						}
 
 						$('#receipt').change(function() {
@@ -527,9 +556,9 @@ $('#unloaders').select2();
 								if(data){
 									$('#loaders').empty().trigger("change");
 									$('#unloaders').empty().trigger("change");
-									var newOption = new Option(data.code+" "+data.name, data.id, true, true);
+									var newOption = new Option(data.code+" "+data.name, data.id, false, false);
 									$('#unloaders').append(newOption).trigger('change');
-									var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+									var newOption2 = new Option(data.code+" "+data.name, data.id, false, false);
 									$('#loaders').append(newOption2).trigger('change');
 								}
 							});
@@ -539,15 +568,31 @@ $('#unloaders').select2();
 							var id = $(this).val();
 							var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
 							$.get(url,function(data){
-								debugger;
 								$('#loaders').empty().trigger("change");
-								$('#unloaders').empty().trigger("change");
 								$.each(data, function(key, value) {
 									$('#loaders').append(
 											$("<option></option>").attr(
 												"value", value.id).text(
 													value.code+" "+value.name));
-									
+									idArr.push(value.id);
+								});
+								var id =  $("#vehicle").val();
+								var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
+
+								$.get(url,function(data){
+									var newOption = new Option(data.code+" "+data.name, data.id, false, false);
+									$('#loaders').append(newOption).trigger('change');
+								});
+								$('#loaders').val(idArr).trigger('change');
+							});
+					});
+
+					$('#unloaderGroup').change(function(){
+							var id = $(this).val();
+							var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
+							$.get(url,function(data){
+								$('#unloaders').empty().trigger("change");
+								$.each(data, function(key, value) {
 									$('#unloaders').append(
 											$("<option></option>").attr(
 												"value", value.id).text(
@@ -556,16 +601,16 @@ $('#unloaders').select2();
 								});
 								var id =  $("#vehicle").val();
 								var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
+
 								$.get(url,function(data){
-									var newOption = new Option(data.code+" "+data.name, data.id, true, true);
-									$('#loaders').append(newOption).trigger('change');
-									var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+									var newOption2 = new Option(data.code+" "+data.name, data.id, false,false);
 									$('#unloaders').append(newOption2).trigger('change');
 								});
-								$('#loaders').val(idArr).trigger('change');
 								$('#unloaders').val(idArr).trigger('change');
 							});
 					});
 
-					});
+				});
+
+
 </script>

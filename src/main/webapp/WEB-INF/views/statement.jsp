@@ -2,12 +2,19 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .table th, .jsgrid .jsgrid-table th,
 .table td, .jsgrid .jsgrid-table td {
   border-top: 1px solid #000000;
   border-collapse:collapse;
 }
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+	font-size: 1rem !important;
+	}
+	.select2-container--default .select2-selection--single .select2-selection__rendered{
+	line-height: 10px
+	}
 </style>
 <div class="col-lg-12 grid-margin">
 	<div class="card">
@@ -648,7 +655,12 @@
 </div>
 </c:if>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.slim.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/select2.min.js" defer></script>
 <script>
+	$(document).ready(function(){
+		$('#users').select2();
+
+	});
 $('#type').change(
 		function() {
 			var name = $(this).val();
@@ -663,8 +675,5 @@ $('#type').change(
 			});
 		})
 		
-/* $(".date").flatpickr({
-    enableTime: false,
-    dateFormat: "d-m-Y"
-}); */
+
 </script>

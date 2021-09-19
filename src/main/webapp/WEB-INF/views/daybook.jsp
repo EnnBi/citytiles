@@ -36,7 +36,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group row">
-									<form:hidden path="id"/>
+									<form:hidden path="id" id="idDayBook"/>
 									<form:hidden path="transactionType" id="transactionType"/>
 									<label class="col-sm-4 col-form-label">Person Type</label>
 									<div class="col-sm-8">
@@ -203,6 +203,13 @@
 			$("#person").text('Transferred By');
 			$('#transactionType').val('Expenditure');
 		}
+      if($('#idDayBook').val()<1){
+		$(".date").flatpickr({
+			enableTime: false,
+	   		dateFormat: "d-m-Y",
+			defaultDate: new Date()
+		});
+	}
 	});
 
 	$('#rev-tab').click(function() {
@@ -263,4 +270,6 @@
 		} */ 
 		
 	});
+
+	
 </script>

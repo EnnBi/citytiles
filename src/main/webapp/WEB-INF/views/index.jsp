@@ -6,7 +6,7 @@
 					<div class="d-flex align-items-center justify-content-md-center">
 						<div class="ml-3">
 							<p class="mb-0">Today's Revenue</p>
-							<h6>12569</h6>
+							<h6>0000</h6>
 						</div>
 					</div>
 				</div>
@@ -18,7 +18,7 @@
 					<div class="d-flex align-items-center justify-content-md-center">
 						<div class="ml-3">
 							<p class="mb-0">Today's Expenditure</p>
-							<h6>2346</h6>
+							<h6>0000</h6>
 						</div>
 					</div>
 				</div>
@@ -30,7 +30,7 @@
 					<div class="d-flex align-items-center justify-content-md-center">
 						<div class="ml-3">
 							<p class="mb-0">Balance</p>
-							<h6>896546</h6>
+							<h6>0000</h6>
 						</div>
 					</div>
 				</div>

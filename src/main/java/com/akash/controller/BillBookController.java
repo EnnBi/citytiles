@@ -1,6 +1,5 @@
 package com.akash.controller;
 
-import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
@@ -27,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.akash.entity.AppUser;
 import com.akash.entity.BillBook;
 import com.akash.entity.BillBookSearch;
+import com.akash.entity.Sales;
 import com.akash.entity.dto.BillBookDTO;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.BillBookRepository;
@@ -89,10 +89,12 @@ public class BillBookController {
 
 	@RequestMapping(value="/save",params="save",method=RequestMethod.POST)
 	public String save(@ModelAttribute("billBook") BillBook billBook, Model model,RedirectAttributes redirectAttributes) {
-		if(billBook.getVehicle() != null)
+		if(billBook.getVehicle() != null)  
 			billBook.setDriver(billBook.getVehicle().getDriver());
 		if(billBook.getLoadingAmount() !=null || billBook.getUnloadingAmount()!=null)
 			setLoadingAndUnloadingCharges(billBook);
+		
+		billBook.getSales().forEach(s->s.setBillBook(billBook));
 		billBookRepository.save(billBook);
 		redirectAttributes.addFlashAttribute("success","Bill Book saved successfully");
 		return "redirect:/bill-book";
@@ -119,7 +121,8 @@ public class BillBookController {
 		String[] userTypes = { Constants.CUSTOMER, Constants.CONTRACTOR };
 		model.addAttribute("customers", appUserRepository.findByUserType_NameInAndActive(userTypes,true));
 		List<AppUser> labours = appUserRepository.findByUserType_NameAndActive(Constants.LABOUR,true);
-		labours.add(billBook.getDriver());
+		if(billBook.getDriver()!=null)
+			labours.add(billBook.getDriver());
 		model.addAttribute("labours", labours);
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("products", productRepository.findAll());

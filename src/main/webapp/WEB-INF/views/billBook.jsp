@@ -125,16 +125,25 @@ line-height: 10px
 				<div class="row">
 					<div class="col-md-6">
 							<div class="form-group row">
-								<label class="col-sm-4 col-form-label">Labour Group</label>
+								<label class="col-sm-4 col-form-label">Loader Labour Group</label>
 								<div class="col-sm-8">
-									<select  class="form-control" name="labourGroup" id="labourGroup" required="required">
-										<option value="">Select any Labour Group</option>
-										<c:forEach items="${labourGroups}" var="item">
-											<option value="${item.id}">${item.name}</option>
-										</c:forEach>
-									</select>
+									<form:select  class="form-control" id="labourGroup" path="labourGroup" >
+										<form:option value="">Select any Labour Group</form:option>
+										<form:options items="${labourGroups}" itemLabel="name" itemValue="id"/>
+									</form:select>
 								</div>
 							</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Unloader Labour Group</label>
+							<div class="col-sm-8">
+								<form:select  class="form-control" id="unloaderGroup" path="unloaderLabourGroup" >
+										<form:option value="">Select any Labour Group</form:option>
+										<form:options items="${labourGroups}" itemLabel="name" itemValue="id"/>
+									</form:select>
+							</div>
+						</div>
 					</div>
 				</div>
 				<hr>
@@ -170,12 +179,12 @@ line-height: 10px
 							</div>
 							<div class="col-sm-2">
 								<form:input type="text" class="form-control quantity"
-									pattern="[0-9]*" placeholder="Quantity"
+									pattern="^\d{1,6}(\.\d{1,2})?$" placeholder="Quantity"
 									path="sales[0].quantity" required="required" />
 							</div>
 							<div class="col-sm-2">
 								<form:input type="text" class="form-control unit"
-									pattern="[0-9]*" placeholder="Unit Price"
+									pattern="^\d{1,6}(\.\d{1,2})?$" placeholder="Unit Price"
 									path="sales[0].unitPrice" required="required" />
 							</div>
 							<div class="col-sm-2">
@@ -280,7 +289,20 @@ line-height: 10px
 									</div>
 									<div class="col-sm-4">
 										<form:input type="text" class="form-control" path="paid"
-											id="paid" pattern="[0-9]*" required="required" />
+											id="paid" pattern="^[0-9]\d{0,9}(\.\d{1,3})?%?$*" required="required" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 ">
+								<div class="form-group row">
+									<div class="col-sm-6 col-form-label">
+										<label class="float-right">Discount:</label>
+									</div>
+									<div class="col-sm-4">
+										<form:input type="text" class="form-control" path="discount"
+											id="discount"  />
 									</div>
 								</div>
 							</div>
@@ -482,6 +504,9 @@ line-height: 10px
 						$('#paid').change(function() {
 							updatePaid();
 						});
+						$('#discount').change(function() {
+							updatePaid();
+						});
 
 						function updateTotal() {
 							var amount = 0;
@@ -507,7 +532,8 @@ line-height: 10px
 						function updatePaid() {
 							var total = Number($('#total').val());
 							var paid = Number($('#paid').val());
-							$('#balance').val(total - paid);
+							var discount = Number($('#discount').val());
+							$('#balance').val(total -discount-paid);
 						}
 
 						$('#receipt').change(function() {
@@ -544,13 +570,30 @@ line-height: 10px
 							var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
 							$.get(url,function(data){
 								$('#loaders').empty().trigger("change");
-								$('#unloaders').empty().trigger("change");
 								$.each(data, function(key, value) {
 									$('#loaders').append(
 											$("<option></option>").attr(
 												"value", value.id).text(
 													value.code+" "+value.name));
-									
+									idArr.push(value.id);
+								});
+								var id =  $("#vehicle").val();
+								var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
+
+								$.get(url,function(data){
+									var newOption = new Option(data.code+" "+data.name, data.id, false, false);
+									$('#loaders').append(newOption).trigger('change');
+								});
+								$('#loaders').val(idArr).trigger('change');
+							});
+					});
+
+					$('#unloaderGroup').change(function(){
+							var id = $(this).val();
+							var url = "${pageContext.request.contextPath}/user/labour-group/" + id;
+							$.get(url,function(data){
+								$('#unloaders').empty().trigger("change");
+								$.each(data, function(key, value) {
 									$('#unloaders').append(
 											$("<option></option>").attr(
 												"value", value.id).text(
@@ -561,12 +604,9 @@ line-height: 10px
 								var url = "${pageContext.request.contextPath}/vehicle/"+id+"/driver";
 
 								$.get(url,function(data){
-									var newOption = new Option(data.code+" "+data.name, data.id, true, true);
-									$('#loaders').append(newOption).trigger('change');
-									var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+									var newOption2 = new Option(data.code+" "+data.name, data.id, false, false);
 									$('#unloaders').append(newOption2).trigger('change');
 								});
-								$('#loaders').val(idArr).trigger('change');
 								$('#unloaders').val(idArr).trigger('change');
 							});
 					});
@@ -579,13 +619,15 @@ line-height: 10px
 								$('#loaders').empty().trigger("change");
 								$('#unloaders').empty().trigger("change");
 								
-								var newOption = new Option(data.code+" "+data.name, data.id, true, true);
+								var newOption = new Option(data.code+" "+data.name, data.id, false, false);
 								$('#unloaders').append(newOption).trigger('change');
-								var newOption2 = new Option(data.code+" "+data.name, data.id, true, true);
+								var newOption2 = new Option(data.code+" "+data.name, data.id, false, false);
 								$('#loaders').append(newOption2).trigger('change');
 							}
 						});
 					});
+
+	 
 });
 	
 	

@@ -88,8 +88,6 @@ public class CustomerStatement {
 		this.type=Constants.DAYBOOK;
 	}
 
-
-
 	public long getId() {
 		return id;
 	}
