@@ -34,8 +34,6 @@ public class RawMaterial {
 	@Column(name="date")
 	LocalDate date;
 	
-	@NotEmpty(message="chalan number is required")
-	@NotNull(message ="chalan number is required")
 	@Column(name="chalan_number")
 	private String chalanNumber;
 	

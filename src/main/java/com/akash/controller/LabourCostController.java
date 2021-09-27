@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.akash.entity.LabourCost;
+import com.akash.repository.AppUserRepository;
 import com.akash.repository.LabourCostRepository;
 import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.ProductRepository;
@@ -37,6 +36,8 @@ public class LabourCostController {
 	SizeRepository sizeRepository;
 	@Autowired
 	LabourGroupRepository labourGroupRepository;
+	@Autowired
+	AppUserRepository appUserRepo;
 	
 	@GetMapping
 	public String add(Model model,HttpSession session)
@@ -64,12 +65,13 @@ public class LabourCostController {
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/labour-cost";
 		}
-		else if(labourCostRepository.existsByProductAndLabourGroupAndSize(labourCost.getProduct(), labourCost.getLabourGroup(),labourCost.getSize()))
-		{
-			redirect.addFlashAttribute("labourCost", labourCost);
-			redirect.addFlashAttribute("fail", "Labour Rate Already Exists");
-			return "redirect:/labour-cost";
-		}
+		/*
+		 * else if(labourCostRepository.existsByProductAndLabourGroupAndSize(labourCost.
+		 * getProduct(), labourCost.getLabourGroup(),labourCost.getSize())) {
+		 * redirect.addFlashAttribute("labourCost", labourCost);
+		 * redirect.addFlashAttribute("fail", "Labour Rate Already Exists"); return
+		 * "redirect:/labour-cost"; }
+		 */
 		
 		
 		else {
@@ -108,12 +110,13 @@ public class LabourCostController {
 			redirect.addFlashAttribute("fail", "Please enter the field correctly");
 			return "redirect:/labour-cost/edit/"+labourCost.getId();
 		}
-		else if(labourCostRepository.existsByProductAndLabourGroupAndSizeAndIdNot(labourCost.getProduct(),labourCost.getLabourGroup(),labourCost.getSize(),labourCost.getId()))
-		{
-			redirect.addFlashAttribute("labourCost", labourCost);
-			redirect.addFlashAttribute("fail", "Labour Rate Already Exists");
-			return "redirect:/labour-cost/edit/" +labourCost.getId();
-		}
+		/*
+		 * else if(labourCostRepository.existsByProductAndLabourGroupAndSizeAndIdNot(
+		 * labourCost.getProduct(),labourCost.getLabourGroup(),labourCost.getSize(),
+		 * labourCost.getId())) { redirect.addFlashAttribute("labourCost", labourCost);
+		 * redirect.addFlashAttribute("fail", "Labour Rate Already Exists"); return
+		 * "redirect:/labour-cost/edit/" +labourCost.getId(); }
+		 */
 		else
 		{
 			labourCostRepository.save(labourCost);
@@ -137,12 +140,6 @@ public class LabourCostController {
 		return "redirect:/labour-cost/pageno=" +page;
 	}
 		
-	@GetMapping("/rate")
-	public ResponseEntity<?> findCost(@RequestParam("product") long productId,
-									  @RequestParam("size") long sizeId,
-									  @RequestParam("labourGroup") long labourGroupId){
-		return ResponseEntity.ok(labourCostRepository.findRate(productId, sizeId, labourGroupId));
-	}
 	
 	@GetMapping("/pageno={page}")
 	public String paginate(@PathVariable("page") int page, Model model, HttpSession session) {
@@ -168,6 +165,7 @@ public class LabourCostController {
 		model.addAttribute("labourGroups", labourGroupRepository.findAll());
 		model.addAttribute("sizes", sizeRepository.findAll());
 		model.addAttribute("products", productRepository.findAll());
+		model.addAttribute("labours",appUserRepo.findByUserType_NameAndActive(Constants.LABOUR, true));
 	}
 
 

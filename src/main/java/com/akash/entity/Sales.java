@@ -25,6 +25,10 @@ public class Sales {
 	@JoinColumn(name="size")
 	Size size;
 	
+	@ManyToOne
+	@JoinColumn(name="color")
+	Color color;
+	
 	@Column(name="quantity")
 	private Double quantity;
 	
@@ -93,6 +97,16 @@ public class Sales {
 
 	public void setBillBook(BillBook billBook) {
 		this.billBook = billBook;
+	}
+	
+	
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	@Override

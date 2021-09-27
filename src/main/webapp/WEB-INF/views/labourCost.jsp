@@ -29,48 +29,29 @@
 				<form:hidden path="id" />
 				
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group row">
 							<form:hidden path="id"/>
-							<label class="col-sm-3 col-form-label">Product</label>
+							<label class="col-sm-3 col-form-label">Labours</label>
 							<div class="col-sm-9">
-								<form:select path="product" class=" form-control" id="product" required="required">
-									<form:option value="">Select any Product</form:option>
-									<form:options items="${products}" itemLabel="name"
+								<form:select path="labour" class=" form-control" id="product" required="required">
+									<form:option value="">Select any Labour</form:option>
+									<form:options items="${labours}" itemLabel="name"
 										itemValue="id" />
 								</form:select>
 								
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Size</label>
+							<label class="col-sm-3 col-form-label">Date</label>
 							<div class="col-sm-9">
-								<form:select path="size" class=" form-control" id="size" required="required">
-									<form:option value="">Select any Size</form:option>
-									<form:options items="${sizes}" itemLabel="name"
-										itemValue="id" />
-								</form:select>
+								<form:input type="text" class="form-control date" path="date" required="required"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Labour Group</label>
-							<div class="col-sm-9">
-								<form:select path="labourGroup" class=" form-control" id="lg" required="required">
-									<form:option value="">Select any Labour Group</form:option>
-									<form:options items="${labourGroups}" itemLabel="name"
-										itemValue="id" />
-								</form:select>
-								
-							</div>
-						</div>
-						</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Rate</label>
 							<div class="col-sm-9">
@@ -98,9 +79,8 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Product</th>
-							<th>Size</th>
-							<th>Group</th>
+							<th>Labour</th>
+							<th>Date</th>
 							<th>Rate</th>
 							<th>Action</th>
 						</tr>
@@ -112,9 +92,8 @@
 						<c:forEach items="${list}" var="lc">
 							<tr>
 
-								<td>${lc.product.name}</td>
-								<td>${lc.size.name}</td>
-								<td>${lc.labourGroup.name}</td>
+								<td>${lc.labour.name}</td>
+								<td>${lc.date}</td>
 								<td>${lc.rate}</td>
 								<td><a href="${updatelink}/${lc.id}"
 									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a

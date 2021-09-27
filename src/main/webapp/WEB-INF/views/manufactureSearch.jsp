@@ -91,9 +91,9 @@
 						<tr>
 							<th>Product</th>
 							<th>Size</th>
+							<th>Color</th>
 							<th>Date</th>
 							<th>Quantity</th>
-							<th>Amount</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -103,9 +103,9 @@
 						<tr>
 							<td>${manufacture.product}</td>
 							<td>${manufacture.size}</td>
+							<td>${manufacture.color}</td>
 							<td>${manufacture.date}</td>
 							<td>${manufacture.quantity}</td>
-							<td>${manufacture.amount}</td>
 							<td><a href="${pageContext.request.contextPath}/manufacture/edit/${manufacture.id}"
 									class="btn btn-success btn-fw" style="margin-right: 5px">Edit</a><a
 									href="${pageContext.request.contextPath}/manufacture/delete/${manufacture.id}"

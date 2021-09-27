@@ -109,11 +109,11 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Code</label>
+							<label class="col-sm-3 col-form-label">GSTIN</label>
 							<div class="col-sm-9">
 								<form:input type="text" class="form-control"
-									path="code" />
-								<form:errors path="code" />
+									path="gstin" />
+								<form:errors path="gstin" />
 							</div>
 						</div>
 					</div>

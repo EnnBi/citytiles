@@ -16,8 +16,9 @@ public class ManufactureDTO {
 	
 	Double amount;
 	
+	String color;
 	
-	public ManufactureDTO(long id, String product, String size, LocalDate date, Double quantity, Double amount) {
+	public ManufactureDTO(long id, String product, String size, LocalDate date, Double quantity, Double amount,String color) {
 		super();
 		this.id = id;
 		this.product = product;
@@ -25,6 +26,7 @@ public class ManufactureDTO {
 		this.date = date;
 		this.quantity = quantity;
 		this.amount = amount;
+		this.color=color;
 	}
 
 	public long getId() {
@@ -74,6 +76,16 @@ public class ManufactureDTO {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
+	
 	
 	
 }

@@ -18,6 +18,7 @@ import com.akash.entity.Manufacture;
 import com.akash.entity.ManufactureSearch;
 import com.akash.entity.dto.ManufactureDTO;
 import com.akash.repository.AppUserRepository;
+import com.akash.repository.ColorRepository;
 import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.ManufactureRepository;
 import com.akash.repository.ProductRepository;
@@ -38,6 +39,8 @@ public class ManufactureController {
 	SizeRepository sizeRepository;
 	@Autowired
 	LabourGroupRepository labourGroupRepository;
+	@Autowired
+	ColorRepository colorRepo;
 	
 	int from = 0;
 	int total = 0;
@@ -48,13 +51,15 @@ public class ManufactureController {
 	{
 		fillModel(model);
 		model.addAttribute("manufacture", new Manufacture());
+		
 		return "manufacture";
 	} 
 	
 	@PostMapping("/save")
 	public String save(@ModelAttribute("manufacture") Manufacture manufacture,Model model,RedirectAttributes redirectAttributes)
 	{
-	 manufacture.getLabourInfo().forEach(l->l.setManufacture(manufacture));
+		
+	 //manufacture.getLabourInfo().forEach(l->l.setManufacture(manufacture));
 	 manufactureRepository.save(manufacture);
 	 redirectAttributes.addFlashAttribute("success","Manufacture saved successfully");
 	 return "redirect:/manufacture";
@@ -118,6 +123,6 @@ public class ManufactureController {
 		model.addAttribute("products", productRepository.findAll());
 		model.addAttribute("sizes", sizeRepository.findAll());
 		model.addAttribute("labourGroups", labourGroupRepository.findAll());
-		
+		model.addAttribute("colors", colorRepo.findAll());
 	}
 }

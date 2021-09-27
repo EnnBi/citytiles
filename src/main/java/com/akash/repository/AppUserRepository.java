@@ -30,7 +30,6 @@ public interface AppUserRepository extends CrudRepository<AppUser, Long>,AppUser
 	List<Site> findSitesOnUserId(@Param("id") long id);
 	
 	List<AppUser> findByUserType_NameAndLabourGroup_IdAndActive(String userType,long id,boolean active);
-	
-	
+		
 }
  

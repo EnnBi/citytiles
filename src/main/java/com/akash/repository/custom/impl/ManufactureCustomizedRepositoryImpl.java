@@ -33,7 +33,7 @@ public class ManufactureCustomizedRepositoryImpl implements ManufactureCustomize
 		List<Predicate> predicates = getPredicates(cb, root, manufactureSearch);
 		cq.select(cb.construct(ManufactureDTO.class, root.get("id"), root.get("product").get("name"),
 				root.get("size").get("name"),root.get("date"),
-				root.get("totalQuantity"), root.get("totalAmount")))
+				root.get("quantity"), root.get("totalAmount"),root.get("color").get("name")))
 				.where(predicates.toArray(new Predicate[] {}));
 		
 		cq.orderBy(cb.desc(root.get("date")));

@@ -49,8 +49,7 @@ public class AppUser {
 	@Column(name="Code")
 	String code;
 	
-	@NotNull(message ="Ledger Number is required")
-	@NotEmpty(message="Ledger Number is required")
+	
 	@Column(name="ledger_number")
 	private String ledgerNumber;
 	
@@ -68,6 +67,9 @@ public class AppUser {
 	
 	@Column(name="Active")
 	boolean active;
+	
+	@Column(name="GSTIN")
+	String gstin;
 	
 	public long getId() {
 		return id;
@@ -140,6 +142,13 @@ public class AppUser {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public String getGstin() {
+		return gstin;
+	}
+	public void setGstin(String gstin) {
+		this.gstin = gstin;
 	}
 	@Override
 	public String toString() {

@@ -208,4 +208,11 @@ public class AppUserController {
 	public ResponseEntity<?> findLaboursOnLabourGroup(@PathVariable long id){
 		return ResponseEntity.ok(appUserRepository.findByUserType_NameAndLabourGroup_IdAndActive(Constants.LABOUR,id,true));
 	}
+	
+	@GetMapping("/{id}/gstin")
+	public ResponseEntity<?> ifCustomerHasGst(@PathVariable long id){
+		
+		boolean value = appUserRepository.findById(id).get().getGstin().isEmpty()?false:true;
+		return ResponseEntity.ok(value);
+	}
 }

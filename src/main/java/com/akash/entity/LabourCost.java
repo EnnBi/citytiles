@@ -1,5 +1,7 @@
 package com.akash.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import lombok.Builder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 
@@ -23,17 +25,13 @@ public class LabourCost {
 	Double rate;
 	
 	@ManyToOne
-	@JoinColumn(name="Labour_Group")
-	LabourGroup labourGroup;
+	@JoinColumn(name = "Labour")
+	AppUser labour;
 	
-	@ManyToOne
-	@JoinColumn(name="Product")
-	Product product;
-	
-	@ManyToOne
-	@JoinColumn(name="Size")
-	Size size;
-	
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Column(name = "Date")
+	private LocalDate date;
+
 	public LabourCost() {
 		super();
 	}
@@ -54,28 +52,23 @@ public class LabourCost {
 		this.rate = rate;
 	}
 
-	public LabourGroup getLabourGroup() {
-		return labourGroup;
+
+	public AppUser getLabour() {
+		return labour;
 	}
 
-	public void setLabourGroup(LabourGroup labourGroup) {
-		this.labourGroup = labourGroup;
+	public void setLabour(AppUser labour) {
+		this.labour = labour;
 	}
 
-	public Product getProduct() {
-		return product;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
-	}
+	
+	
 	
 }

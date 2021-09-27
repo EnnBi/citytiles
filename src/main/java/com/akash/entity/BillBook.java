@@ -76,13 +76,13 @@ public class BillBook {
 	@JoinColumn(name = "Bill_Book")
 	List<Sales> sales;
 
-	@NotNull(message = "Please select Loaders")
+	//@NotNull(message = "Please select Loaders")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	@JoinTable(name = "BillBook_Loaders")
 	List<AppUser> loaders;
 
-	@NotNull(message = "Please select Unloaders")
+	//@NotNull(message = "Please select Unloaders")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	@JoinTable(name = "BillBook_Unloaders")
@@ -117,6 +117,17 @@ public class BillBook {
 	
 	@ManyToOne
 	LabourGroup unloaderLabourGroup;
+	
+	
+	
+	@Column(name = "cgst")
+	Double cgst;
+	
+	@Column(name = "sgst")
+	Double sgst;
+	
+	@Transient
+	Double txblAmt;
 	
 	@Transient
 	DecimalFormat df = new DecimalFormat("#.##"); 
@@ -327,6 +338,30 @@ public class BillBook {
 
 	public void setUnloaderLabourGroup(LabourGroup unloaderLabourGroup) {
 		this.unloaderLabourGroup = unloaderLabourGroup;
+	}
+	
+	public Double getCgst() {
+		return cgst;
+	}
+
+	public void setCgst(Double cgst) {
+		this.cgst = cgst;
+	}
+
+	public Double getSgst() {
+		return sgst;
+	}
+
+	public void setSgst(Double sgst) {
+		this.sgst = sgst;
+	}
+	
+	public Double getTxblAmt() {
+		return txblAmt;
+	}
+
+	public void setTxblAmt(Double txblAmt) {
+		this.txblAmt = txblAmt;
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,6 +32,10 @@ public class Manufacture {
 	@ManyToOne
 	@JoinColumn(name = "size")
 	Size size;
+	
+	@ManyToOne
+	@JoinColumn(name="color")
+	Color color;
 
 	@Column(name = "date")
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -55,6 +60,15 @@ public class Manufacture {
 	@ManyToOne
 	@JoinColumn(name="Labour_Group")
 	LabourGroup labourGroup;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	List<AppUser> fullDay;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	List<AppUser> halfDay;
+	
+	@Column(name = "quantity")
+	private Double quantity;
 	
 	public long getId() {
 		return id;
@@ -134,6 +148,38 @@ public class Manufacture {
 
 	public void setLabourGroup(LabourGroup labourGroup) {
 		this.labourGroup = labourGroup;
+	}
+	
+	public List<AppUser> getFullDay() {
+		return fullDay;
+	}
+
+	public void setFullDay(List<AppUser> fullDay) {
+		this.fullDay = fullDay;
+	}
+
+	public List<AppUser> getHalfDay() {
+		return halfDay;
+	}
+
+	public void setHalfDay(List<AppUser> halfDay) {
+		this.halfDay = halfDay;
+	}
+
+	public Double getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	@Override

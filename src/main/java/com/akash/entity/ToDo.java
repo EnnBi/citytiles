@@ -10,6 +10,8 @@ import javax.persistence.Id;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class ToDo {
 
@@ -21,6 +23,7 @@ public class ToDo {
 	String text;
 	
 	@Column(name="Date")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern="dd-MM-yyyy")
 	LocalDate date;
 	

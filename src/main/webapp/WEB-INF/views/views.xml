@@ -94,23 +94,28 @@
 			value="/WEB-INF/views/daybookSearch.jsp" />
 	</definition>
 	<definition name="labourGroup" extends="base">
-		<put-attribute name="title" value="Daybook" />
+		<put-attribute name="title" value="LabourGroup" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/labourGroup.jsp" />
 	</definition>
 	<definition name="labourCost" extends="base">
-		<put-attribute name="title" value="Daybook" />
+		<put-attribute name="title" value="LabourCost" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/labourCost.jsp" />
 	</definition>
 	<definition name="statement" extends="base">
-		<put-attribute name="title" value="Daybook" />
+		<put-attribute name="title" value="Statement" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/statement.jsp" />
 	</definition>
 	<definition name="inventory" extends="base">
-		<put-attribute name="title" value="Daybook" />
+		<put-attribute name="title" value="Inventory" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/inventory.jsp" />
+	</definition>
+	<definition name="color" extends="base">
+		<put-attribute name="title" value="Color" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/color.jsp" />
 	</definition>
 </tiles-definitions>

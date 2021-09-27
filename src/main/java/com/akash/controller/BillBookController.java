@@ -30,6 +30,7 @@ import com.akash.entity.Sales;
 import com.akash.entity.dto.BillBookDTO;
 import com.akash.repository.AppUserRepository;
 import com.akash.repository.BillBookRepository;
+import com.akash.repository.ColorRepository;
 import com.akash.repository.LabourGroupRepository;
 import com.akash.repository.ProductRepository;
 import com.akash.repository.SiteRepository;
@@ -66,6 +67,8 @@ public class BillBookController {
 	SizeRepository sizeRepository;
 	@Autowired
 	LabourGroupRepository labourGroupRepository;
+	@Autowired
+	ColorRepository colorRepo;
 	
 	int from = 0;
 	int total = 0;
@@ -79,9 +82,15 @@ public class BillBookController {
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("products", productRepository.findAll());
 		model.addAttribute("labourGroups", labourGroupRepository.findAll());
+		model.addAttribute("colors", colorRepo.findAll());
 		if(model.asMap().containsKey("print")){
 			BillBook billBook = (BillBook) model.asMap().get("billBookPrint");
 			printBillBook(billBook, response);
+		}
+		
+		if(model.asMap().containsKey("printChallan")){
+			BillBook billBook = (BillBook) model.asMap().get("billBookPrint");
+			printChallanBillBook(billBook.getId(), response);
 		}
 		
 		return "billBook";
@@ -104,10 +113,25 @@ public class BillBookController {
 	public String printAndSaveBillBook(@ModelAttribute("billBook") BillBook billBook, Model model,RedirectAttributes redirectAttributes,HttpServletResponse response){
 		if(billBook.getVehicle() != null)
 			billBook.setDriver(billBook.getVehicle().getDriver());
-		setLoadingAndUnloadingCharges(billBook);
+		if(billBook.getLoadingAmount() !=null || billBook.getUnloadingAmount()!=null)
+			setLoadingAndUnloadingCharges(billBook);
 		billBookRepository.save(billBook);
 		redirectAttributes.addFlashAttribute("success","Bill Book saved successfully");
 		redirectAttributes.addFlashAttribute("print",true);
+		redirectAttributes.addFlashAttribute("billBookPrint",billBook);
+		return "redirect:/bill-book";
+
+	}
+	
+	@RequestMapping(value="/save",params="printChallan",method=RequestMethod.POST)
+	public String printChallanAndSaveBillBook(@ModelAttribute("billBook") BillBook billBook, Model model,RedirectAttributes redirectAttributes,HttpServletResponse response){
+		if(billBook.getVehicle() != null)
+			billBook.setDriver(billBook.getVehicle().getDriver());
+		if(billBook.getLoadingAmount() !=null || billBook.getUnloadingAmount()!=null)
+			setLoadingAndUnloadingCharges(billBook);
+		billBookRepository.save(billBook);
+		redirectAttributes.addFlashAttribute("success","Bill Book saved successfully");
+		redirectAttributes.addFlashAttribute("printChallan",true);
 		redirectAttributes.addFlashAttribute("billBookPrint",billBook);
 		return "redirect:/bill-book";
 
@@ -129,6 +153,7 @@ public class BillBookController {
 		model.addAttribute("sites", siteRepository.findAll());
 		model.addAttribute("sizes", sizeRepository.findAll());
 		model.addAttribute("labourGroups", labourGroupRepository.findAll());
+		model.addAttribute("colors", colorRepo.findAll());
 		return "billBookEdit";
 	}
 
@@ -169,6 +194,24 @@ public class BillBookController {
 	@GetMapping("/print/{id}")
 	public void printBillBook(@PathVariable long id,HttpServletResponse response){
 		BillBook billBook = billBookRepository.findById(id).get();
+		Double txblAmt = billBook.getTotal()- (billBook.getTotal()*0.18);
+		billBook.setTxblAmt(txblAmt);
+		printBillBook(billBook, response);
+	}
+	
+	@GetMapping("/printChallan/{id}")
+	public void printChallanBillBook(@PathVariable long id,HttpServletResponse response){
+		BillBook billBook = billBookRepository.findById(id).get();
+		billBook.setTotal(null);
+		billBook.setCgst(null);
+		billBook.setSgst(null);
+		billBook.setDiscount(null);
+		billBook.setPaid(null);
+		billBook.setBalance(null);
+		billBook.getSales().forEach(b->{
+		b.setAmount(null);
+		b.setUnitPrice(null);
+		});
 		printBillBook(billBook, response);
 	}
 	
@@ -194,6 +237,7 @@ public class BillBookController {
 		model.addAttribute("vehicles", vehicleRepo.findAll());
 		model.addAttribute("sites", siteRepository.findAll());
 		model.addAttribute("labourGroups", labourGroupRepository.findAll());
+		model.addAttribute("colors", colorRepo.findAll());
 		
 	}
 	

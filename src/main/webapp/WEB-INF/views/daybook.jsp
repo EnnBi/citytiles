@@ -127,7 +127,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group row">
-									<label class="col-sm-4 col-form-label" id="person">Transferred
+									<label class="col-sm-4 col-form-label" id="person">Recieved
 										By</label>
 									<div class="col-sm-8">
 										<form:input type="text" class="form-control"
@@ -137,8 +137,8 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group row">
-									<label class="col-sm-4 col-form-label" id="accountNumberLbl">Transferred
-										From</label>
+									<label class="col-sm-4 col-form-label" id="accountNumberLbl">Recieved
+										Into</label>
 									<div class="col-sm-8">
 										<form:select class="form-control" path="accountNumber" required="required"
 											id="accountNumber">
@@ -193,15 +193,16 @@
 		
 		var transactionType=$('#transactionType').val();
 		console.log(transactionType);
-		if(transactionType=='Revenue'){
-			$("#accountNumberLbl").text('Received Into');
-			$("#person").text('Received By');
-			$('#transactionType').val('Revenue');
-		}
-		else{
+		if(transactionType=='Expenditure'){
 			$("#accountNumberLbl").text('Transferred From');
 			$("#person").text('Transferred By');
 			$('#transactionType').val('Expenditure');
+		}
+		else{
+			
+			$("#accountNumberLbl").text('Received Into');
+			$("#person").text('Received By');
+			$('#transactionType').val('Revenue');
 		}
       if($('#idDayBook').val()<1){
 		$(".date").flatpickr({

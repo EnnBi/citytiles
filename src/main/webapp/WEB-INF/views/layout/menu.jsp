@@ -115,6 +115,9 @@
 						href="${pageContext.request.contextPath}/labour-group">Labour Group</a></li>	
 						<li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/labour-cost">Labour Rate</a></li>	
+							
+							<li class="nav-item"><a class="nav-link"
+							href="${pageContext.request.contextPath}/color">Color</a></li>	
 				</ul>
 			</div></li>
 		

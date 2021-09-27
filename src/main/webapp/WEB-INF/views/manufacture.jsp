@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet" />
 <style>
 .select2-container--default .select2-selection--multiple .select2-selection__choice{
 font-size: 1rem !important;
@@ -21,7 +21,7 @@ font-size: 1rem !important;
 			<form:form action="${pageContext.request.contextPath}/manufacture/save" modelAttribute="manufacture"
 				method="post">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Product</label>
 							<div class="col-sm-9">
@@ -34,17 +34,7 @@ font-size: 1rem !important;
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Date</label>
-							<div class="col-sm-9">
-								<form:input type="text" class="form-control date" path="date" required="required"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Size</label>
 							<div class="col-sm-9">
@@ -54,10 +44,33 @@ font-size: 1rem !important;
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group row">
-							<label class="col-sm-6 col-form-label">Labour Group</label>
-							<div class="col-sm-6">
+							<label class="col-sm-3 col-form-label">Date</label>
+							<div class="col-sm-9">
+								<form:input type="text" class="form-control date" path="date" required="required"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Color</label>
+							<div class="col-sm-9">
+								<form:select path="color" class=" form-control" id="color">
+									<form:option value="">Select any Color</form:option>
+									<form:options items="${colors}" itemLabel="name"
+										itemValue="id" />
+								</form:select>
+								<form:errors class="err" path="color" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Labour Group</label>
+							<div class="col-sm-9">
 								<form:hidden path="cpu" id="cpu"/>
 								<form:select path="labourGroup" class=" form-control" id="labourGroup" required="required">
 									<form:option value="">Select any Labour Group</form:option>
@@ -67,16 +80,16 @@ font-size: 1rem !important;
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group row">
-							<label class="col-sm-6 col-form-label">Cement</label>
-							<div class="col-sm-6">
-								<form:input class="form-control" placeholder="Cement" path="cement" required="required"/>
-							</div>
+							<label class="col-sm-3 col-form-label qtyLabel" >Quantity</label>
+								<div class="col-sm-9"> 
+									<form:input class="form-control quantity" placeholder="Quantity" path="quantity" required="required"/>
+								</div>
 						</div>
 					</div>
 				</div>
-				<hr>
+				<!-- <hr>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group row">
@@ -89,50 +102,34 @@ font-size: 1rem !important;
 						</div>
 					</div>
 				</div>
-				<hr>
+				<hr> -->
 				<div class="labour-info">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-md-12">
 							<div class="form-group row">
-								<label class="col-sm-4 col-form-label qtyLabel" >Quantity #1</label>
-								<div class="col-sm-8"> 
-									<form:input class="form-control quantity" placeholder="Quantity" path="labourInfo[0].quantity" required="required"/>
+								<label class="col-sm-3 col-form-label">Labours(Full Day)</label>
+								<div class="col-sm-9">
+									<form:select path="fullDay" class=" form-control labors" 
+										multiple="multiple">
+										<form:options items="${labours}" itemLabel="name"
+											itemValue="id" />
+									</form:select>
+									<form:errors class="err" path="fullDay" />
 								</div>
 							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="form-group row">
-								<label class="col-sm-6 col-form-label">Total Amount</label>
-								<div class="col-sm-6">
-									<form:input class="form-control totalAmt" placeholder="Total Amount" path="labourInfo[0].totalAmount" readonly="true"/>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="form-group row">
-								<label class="col-sm-7 col-form-label">Amount Per Head</label>
-								<div class="col-sm-5">
-									<form:input class="form-control amountPerHead" placeholder="Amount Per Head" path="labourInfo[0].amountPerHead" readonly="true"/>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-1">
-							<button type="button" class="btn btn-danger delete">
-								<i class="mdi mdi-delete"></i>
-							</button>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group row">
-								<label class="col-sm-1 col-form-label">Labours</label>
-								<div class="col-sm-11">
-									<form:select path="labourInfo[0].labours" class=" form-control labors"  required="required"
+								<label class="col-sm-3 col-form-label">Labours(Half Day)</label>
+								<div class="col-sm-9">
+									<form:select path="halfDay" class=" form-control labors" 
 										multiple="multiple">
 										<form:options items="${labours}" itemLabel="name"
 											itemValue="id" />
 									</form:select>
-									<form:errors class="err" path="labourInfo[0].labours" />
+									<form:errors class="err" path="halfDay" />
 								</div>
 							</div>
 						</div>
@@ -140,28 +137,7 @@ font-size: 1rem !important;
 					<hr style="border: 1px dotted #d0d0d0">
 				</div>
 				
-				<div class="row">
-
-					<div class="col-md-6">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Total Amount</label>
-							<div class="col-sm-9">
-								<form:input path="totalAmount" class="form-control" id="totalAmount" readonly="true"/>
-								<form:errors class="err" path="totalAmount" />
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Total Quantity</label>
-							<div class="col-sm-9">
-								<form:input path="totalQuantity" class="form-control" id="totalQuantity" readonly="true"/>
-								<form:errors class="err" path="totalQuantity" />
-							</div>
-						</div>
-					</div>
-					
-				</div>
+				
 			
 			<div class="form-group row float-right">
 							<input type="submit" class="btn btn-success btn-fw"
@@ -213,7 +189,7 @@ $(document).ready(function(){
 			$('.labSel:last').append($(
 			"<option></option>").attr(
 					"value", value.id).text(
-							value.code+" "+value.name));
+							value.name));
 			});
 			
 			$('.labors').get().forEach(function(entry, index, array) {
@@ -222,7 +198,7 @@ $(document).ready(function(){
 					$(entry).append($(
 							"<option></option>").attr(
 							"value", value.id).text(
-							value.code+" "+value.name));
+							value.name));
 					idArr.push(value.id);
 				});
 				$(entry).val(idArr).trigger('change');

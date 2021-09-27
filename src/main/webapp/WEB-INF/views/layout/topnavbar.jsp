@@ -4,11 +4,11 @@
 		class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
 		<a class="navbar-brand brand-logo" href="index.html"
 			style="color: black;">
-			<!-- <img src="/resources/images/logo.svg" alt="logo"/> -->Akash
-			Enterprises
+			<!-- <img src="/resources/images/logo.svg" alt="logo"/> -->City
+			Tiles
 		</a> <a class="navbar-brand brand-logo-mini" href="index.html"
 			style="color: black;">
-			<!-- <img src="/resources/images/logo-mini.svg" alt="logo"/> -->AE
+			<!-- <img src="/resources/images/logo-mini.svg" alt="logo"/> -->CT
 		</a>
 	</div>
 	<!-- <div class="navbar-menu-wrapper d-flex align-items-center">

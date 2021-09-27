@@ -68,7 +68,7 @@
 			</div>
 			<div class="list-wrapper" style="overflow-y: scroll; height:400px;">
 				<ul class="d-flex flex-column-reverse todo-list todo-list-custom" id="todoList">
-					<li>
+					<!-- <li>
 						<div class="events py-4 px-3">
 							<div class="wrapper d-flex mb-2">
 								<i class="mdi mdi-circle-outline text-primary mr-2"></i> <span>Feb
@@ -78,7 +78,7 @@
 								page build a js based app</p>
 							<p class="text-gray mb-0"></p>
 						</div> <i class="remove mdi mdi-close-circle-outline"></i>
-					</li>
+					</li> -->
 					
 				</ul>
 			</div>
@@ -160,6 +160,7 @@
 				dataType:'json',
 				contentType:'application/json',
 				success:function(item){
+					$('#todoList').empty();
 					getToDoList();
 					$('#todoDate').val('');
 					$('#todoText').val('');

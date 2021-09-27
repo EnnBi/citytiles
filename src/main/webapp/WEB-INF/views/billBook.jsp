@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/resources/css/select2.min.css" rel="stylesheet" />
 <style>
 .select2-container--default .select2-selection--multiple .select2-selection__choice{
 font-size: 1rem !important;
@@ -122,7 +122,7 @@ line-height: 10px
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-6">
 							<div class="form-group row">
 								<label class="col-sm-4 col-form-label">Loader Labour Group</label>
@@ -145,7 +145,7 @@ line-height: 10px
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<hr>
 				<div class="row">
 					<div class="col-md-12">
@@ -163,7 +163,7 @@ line-height: 10px
 				<div class="row sales-row">
 					<div class="col-md-12">
 						<div class="form-group row">
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<form:select class="form-control product" required="required"
 									path="sales[0].product">
 									<form:option value="">Select Products</form:option>
@@ -178,11 +178,19 @@ line-height: 10px
 								</form:select>
 							</div>
 							<div class="col-sm-2">
+								<form:select class="form-control color" required="required"
+									path="sales[0].color">
+									<form:option value="">Select Color</form:option>
+									<form:options items="${colors}" itemLabel="name"
+										itemValue="id" />
+								</form:select>
+							</div>
+							<div class="col-sm-2">
 								<form:input type="text" class="form-control quantity"
 									pattern="^\d{1,6}(\.\d{1,2})?$" placeholder="Quantity"
 									path="sales[0].quantity" required="required" />
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<form:input type="text" class="form-control unit"
 									pattern="^\d{1,6}(\.\d{1,2})?$" placeholder="Unit Price"
 									path="sales[0].unitPrice" required="required" />
@@ -201,7 +209,7 @@ line-height: 10px
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-						<div class="row">
+					<!--	 <div class="row">
 							<div class="col-md-12">
 								<div class="form-group row">
 									<label class="col-sm-4 col-form-label">Loaders</label>
@@ -226,18 +234,18 @@ line-height: 10px
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<div class="col-md-6">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group row">
 									<div class="col-sm-6 col-form-label">
-										<label class="float-right">Loading:</label>
+										<label class="float-right">CGST@9.0%:</label>
 									</div>
 									<div class="col-sm-4">
-										<form:input type="text" class="form-control" pattern="[0-9]*"
-											path="loadingAmount" id="loadingAmount" />
+										<form:input type="text" class="form-control"
+											path="cgst" id="cgst" readonly="true"/>
 									</div>
 								</div>
 							</div>
@@ -246,16 +254,16 @@ line-height: 10px
 							<div class="col-md-12 ">
 								<div class="form-group row">
 									<div class="col-sm-6 col-form-label">
-										<label class="float-right">Unloading:</label>
+										<label class="float-right">SGST@9.0%</label>
 									</div>
 									<div class="col-sm-4">
-										<form:input type="text" class="form-control" pattern="[0-9]*"
-											path="unloadingAmount" id="unloadingAmount" />
+										<form:input type="text" class="form-control"
+											path="sgst" id="sgst"  readonly="true"/>
 									</div>
 								</div>
-							</div>
+							</div> 
 						</div>
-						<div class="row">
+						<!--<div class="row">
 							<div class="col-md-12 ">
 								<div class="form-group row">
 									<div class="col-sm-6 col-form-label">
@@ -267,7 +275,7 @@ line-height: 10px
 									</div>
 								</div>
 							</div>
-						</div>
+						</div>-->
 						<div class="row">
 							<div class="col-md-12 ">
 								<div class="form-group row">
@@ -326,7 +334,11 @@ line-height: 10px
 						</div>
 						<div class="form-group row float-right">
 							<input type="submit" class="btn btn-primary btn-fw" style="margin-right: 2rem;"
-								value="Submit And Print" name="print">
+								value="Submit And Print Bill" name="print">
+						</div>
+						<div class="form-group row float-right">
+							<input type="submit" class="btn btn-primary btn-fw" style="margin-right: 2rem;"
+								value="Submit And Print Challan" name="printChallan">
 						</div>
 					</div>
 				</div>
@@ -514,16 +526,31 @@ line-height: 10px
 								var amt = $(this).val();
 								amount = amount + Number(amt);
 							});
-							var loadingAmt = $('#loadingAmount').val() ? $(
-									'#loadingAmount').val() : 0;
-							var unloadingAmt = $('#unloadingAmount').val() ? $(
-									'#unloadingAmount').val() : 0;
-							var carraige = $('#carraige').val() ? $('#carraige')
-									.val()
-									: 0;
-							amount += Number(loadingAmt);
-							amount += Number(unloadingAmt);
-							amount += Number(carraige);
+							// var loadingAmt = $('#loadingAmount').val() ? $(
+							// 		'#loadingAmount').val() : 0;
+							// var unloadingAmt = $('#unloadingAmount').val() ? $(
+							// 		'#unloadingAmount').val() : 0;
+							// var carraige = $('#carraige').val() ? $('#carraige')
+							// 		.val()
+							// 		: 0;
+
+							var id = $('#customer').val();
+							var url = "${pageContext.request.contextPath}/user/"+id+"/gstin";
+							$.get(url,function(data){
+								if(data){
+									var cgst = amount*0.09;
+									var sgst = amount*0.09;
+									amount+=Number(cgst);
+									amount+=Number(sgst);
+									
+									$('#cgst').val(cgst);
+									$('#sgst').val(sgst);
+									$('#total').val(amount);
+							$('#balance').val(amount);
+							updatePaid();
+								}
+							});
+
 							$('#total').val(amount);
 							$('#balance').val(amount);
 							updatePaid();
@@ -627,7 +654,11 @@ line-height: 10px
 						});
 					});
 
-	 
+					$(".date").flatpickr({
+						enableTime: false,
+						dateFormat: "d-m-Y",
+						defaultDate: new Date()
+					});
 });
 	
 	

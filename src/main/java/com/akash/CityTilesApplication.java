@@ -1,4 +1,4 @@
-package com.akash;
+   package com.akash;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,10 +11,10 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 
 @SpringBootApplication
-public class AkashApplication extends SpringBootServletInitializer{
+public class CityTilesApplication extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {
-		SpringApplication.run(AkashApplication.class, args);
+		SpringApplication.run(CityTilesApplication.class, args);
 	}
 	
 	@Bean

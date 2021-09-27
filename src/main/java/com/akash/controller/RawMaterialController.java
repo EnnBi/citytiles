@@ -76,7 +76,6 @@ public class RawMaterialController {
 
 		else {
 
-			rawMaterial.setDate(LocalDate.now());
 			rawMaterialRepository.save(rawMaterial);
 			redirect.addFlashAttribute("success", "Raw Material Saved Successfully");
 			return "redirect:/raw-material";
